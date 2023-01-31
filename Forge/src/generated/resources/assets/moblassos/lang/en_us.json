@@ -1,10 +1,15 @@
 {
+  "enchantment.moblassos.holding": "Holding",
+  "enchantment.moblassos.holding.desc": "Increases the time a lasso is able to hold a mob.",
   "item.moblassos.aqua_lasso": "Aqua Lasso",
   "item.moblassos.contract": "Contract",
+  "item.moblassos.contract.accept": "%s has accepted your contract.",
+  "item.moblassos.contract.reject": "%s has rejected your contract.",
   "item.moblassos.creative_lasso": "Creative Lasso",
   "item.moblassos.diamond_lasso": "Diamond Lasso",
   "item.moblassos.emerald_lasso": "Emerald Lasso",
   "item.moblassos.golden_lasso": "Golden Lasso",
   "item.moblassos.hostile_lasso": "Hostile Lasso",
+  "item.moblassos.hostile_lasso.hostile": "%s must be below %s health (currently %s).",
   "itemGroup.moblassos.main": "Mob Lassos"
 }

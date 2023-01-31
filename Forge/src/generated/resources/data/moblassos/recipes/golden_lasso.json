@@ -7,6 +7,9 @@
     "&": {
       "item": "minecraft:ender_pearl"
     },
+    "+": {
+      "item": "minecraft:leather"
+    },
     "X": {
       "item": "minecraft:gold_nugget"
     }
@@ -14,7 +17,7 @@
   "pattern": [
     "X#X",
     "#&#",
-    "X#X"
+    "X+X"
   ],
   "result": {
     "item": "moblassos:golden_lasso"

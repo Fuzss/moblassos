@@ -19,5 +19,6 @@ public class ModEntityTypeTagsProvider extends EntityTypeTagsProvider {
         this.tag(ModRegistry.DIAMOND_LASSO_BLACKLIST_ENTITY_TYPE_TAG);
         this.tag(ModRegistry.EMERALD_LASSO_BLACKLIST_ENTITY_TYPE_TAG);
         this.tag(ModRegistry.HOSTILE_LASSO_BLACKLIST_ENTITY_TYPE_TAG);
+        this.tag(ModRegistry.CREATIVE_LASSO_BLACKLIST_ENTITY_TYPE_TAG);
     }
 }

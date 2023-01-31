@@ -1,4 +1,4 @@
-// 1.19.2	2023-01-30T11:50:12.068668	Recipes
+// 1.19.2	2023-01-31T22:42:37.362883	Recipes
 4dec32cb14061e79105317bb3ba008ce61f75d62 data/moblassos/advancements/recipes/moblassos.main/aqua_lasso.json
 139570fcf8d9df79278a696144bcefcab62675a6 data/moblassos/advancements/recipes/moblassos.main/contract.json
 bfdc636d9027139501897083471a65bc1376baf6 data/moblassos/advancements/recipes/moblassos.main/diamond_lasso.json
@@ -9,5 +9,5 @@ bfdc636d9027139501897083471a65bc1376baf6 data/moblassos/advancements/recipes/mob
 65a02f9e738ae7a8d3d5daf5a6d18e37082a80f8 data/moblassos/recipes/contract.json
 85e4516003d0d878e2f00a33101ca6b712368d1b data/moblassos/recipes/diamond_lasso.json
 bdc064596c27d990c6ad0397ffa7af0f8a6d6047 data/moblassos/recipes/emerald_lasso.json
-ad29a5ac0f358cf06ec8dd3d8448958c7d2fd793 data/moblassos/recipes/golden_lasso.json
+11e97ad1f156d22848e85ae6712fff844a56415b data/moblassos/recipes/golden_lasso.json
 79b7e5d55746b478e187b2700b285bda637ca49a data/moblassos/recipes/hostile_lasso.json

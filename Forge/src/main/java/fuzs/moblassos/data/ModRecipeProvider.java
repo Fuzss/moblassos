@@ -23,9 +23,10 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('#', Items.STRING)
                 .define('X', Items.GOLD_NUGGET)
                 .define('&', Items.ENDER_PEARL)
+                .define('+', Items.LEATHER)
                 .pattern("X#X")
                 .pattern("#&#")
-                .pattern("X#X")
+                .pattern("X+X")
                 .unlockedBy(getHasName(Items.ENDER_PEARL), has(Items.ENDER_PEARL))
                 .save(recipeConsumer);
         ShapedRecipeBuilder.shaped(ModRegistry.AQUA_LASSO_ITEM.get())

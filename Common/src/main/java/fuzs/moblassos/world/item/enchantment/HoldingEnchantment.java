@@ -1,13 +1,13 @@
 package fuzs.moblassos.world.item.enchantment;
 
+import fuzs.moblassos.init.ModRegistry;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
 public class HoldingEnchantment extends Enchantment {
 
     public HoldingEnchantment(Enchantment.Rarity rarity, EquipmentSlot... applicableSlots) {
-        super(rarity, EnchantmentCategory.BREAKABLE, applicableSlots);
+        super(rarity, ModRegistry.LASSO_ENCHANTMENT_CATEGORY, applicableSlots);
     }
 
     @Override

@@ -2,6 +2,9 @@ package fuzs.moblassos;
 
 import fuzs.moblassos.config.ServerConfig;
 import fuzs.moblassos.init.ModRegistry;
+import fuzs.moblassos.networking.ClientboundVillagerContractMessage;
+import fuzs.moblassos.networking.ClientboundVillagerParticlesMessage;
+import fuzs.puzzleslib.api.networking.v3.NetworkHandlerV3;
 import fuzs.puzzleslib.config.ConfigHolder;
 import fuzs.puzzleslib.core.CommonFactories;
 import fuzs.puzzleslib.core.ModConstructor;
@@ -16,6 +19,7 @@ public class MobLassos implements ModConstructor {
 
     @SuppressWarnings("Convert2MethodRef")
     public static final ConfigHolder CONFIG = CommonFactories.INSTANCE.serverConfig(ServerConfig.class, () -> new ServerConfig());
+    public static final NetworkHandlerV3 NETWORKING = NetworkHandlerV3.builder(MOD_ID).registerClientbound(ClientboundVillagerContractMessage.class).registerClientbound(ClientboundVillagerParticlesMessage.class).build();
 
     @Override
     public void onConstructMod() {
