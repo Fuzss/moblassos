@@ -2,6 +2,7 @@ package fuzs.moblassos.client;
 
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.init.ModRegistry;
+import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.client.core.ClientFactories;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
@@ -20,8 +21,7 @@ public class MobLassosForgeClient {
     @SubscribeEvent
     public static void onRegisterColorHandlers$Item(final RegisterColorHandlersEvent.Item evt) {
         evt.register((stack, tintIndex) -> {
-            MobLassos.LOGGER.info("stack {}, tint {}", stack, tintIndex);
-            return 0;
-        }, ModRegistry.GOLDEN_LASSO_ITEM.get());
+            return ((LassoItem) stack.getItem()).getColor(stack, tintIndex);
+        }, ModRegistry.GOLDEN_LASSO_ITEM.get(), ModRegistry.AQUA_LASSO_ITEM.get(), ModRegistry.DIAMOND_LASSO_ITEM.get(), ModRegistry.EMERALD_LASSO_ITEM.get(), ModRegistry.HOSTILE_LASSO_ITEM.get(), ModRegistry.CREATIVE_LASSO_ITEM.get());
     }
 }

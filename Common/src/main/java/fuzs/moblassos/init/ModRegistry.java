@@ -1,6 +1,7 @@
 package fuzs.moblassos.init;
 
 import fuzs.moblassos.MobLassos;
+import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.core.CommonAbstractions;
 import fuzs.puzzleslib.core.CommonFactories;
 import fuzs.puzzleslib.init.RegistryManager;
@@ -16,12 +17,12 @@ import net.minecraft.world.item.ItemStack;
 public class ModRegistry {
     public static final CreativeModeTab CREATIVE_MODE_TAB = CommonAbstractions.INSTANCE.creativeModeTab(MobLassos.MOD_ID, () -> new ItemStack(ModRegistry.GOLDEN_LASSO_ITEM.get()));
     private static final RegistryManager REGISTRY = CommonFactories.INSTANCE.registration(MobLassos.MOD_ID);
-    public static final RegistryReference<Item> GOLDEN_LASSO_ITEM = REGISTRY.registerItem("golden_lasso", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
-    public static final RegistryReference<Item> AQUA_LASSO_ITEM = REGISTRY.registerItem("aqua_lasso", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
-    public static final RegistryReference<Item> DIAMOND_LASSO_ITEM = REGISTRY.registerItem("diamond_lasso", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
-    public static final RegistryReference<Item> EMERALD_LASSO_ITEM = REGISTRY.registerItem("emerald_lasso", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
-    public static final RegistryReference<Item> HOSTILE_LASSO_ITEM = REGISTRY.registerItem("hostile_lasso", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
-    public static final RegistryReference<Item> CREATIVE_LASSO_ITEM = REGISTRY.registerItem("creative_lasso", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
+    public static final RegistryReference<Item> GOLDEN_LASSO_ITEM = REGISTRY.registerItem("golden_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB), LassoItem.Type.GOLDEN));
+    public static final RegistryReference<Item> AQUA_LASSO_ITEM = REGISTRY.registerItem("aqua_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB), LassoItem.Type.GOLDEN));
+    public static final RegistryReference<Item> DIAMOND_LASSO_ITEM = REGISTRY.registerItem("diamond_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB), LassoItem.Type.GOLDEN));
+    public static final RegistryReference<Item> EMERALD_LASSO_ITEM = REGISTRY.registerItem("emerald_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB), LassoItem.Type.GOLDEN));
+    public static final RegistryReference<Item> HOSTILE_LASSO_ITEM = REGISTRY.registerItem("hostile_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB), LassoItem.Type.GOLDEN));
+    public static final RegistryReference<Item> CREATIVE_LASSO_ITEM = REGISTRY.registerItem("creative_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB), LassoItem.Type.GOLDEN));
     public static final RegistryReference<Item> CONTRACT_ITEM = REGISTRY.registerItem("contract", () -> new Item(new Item.Properties().tab(CREATIVE_MODE_TAB)));
 
     public static final TagKey<Item> LASSOS_ITEM_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(MobLassos.MOD_ID, "lassos"));
