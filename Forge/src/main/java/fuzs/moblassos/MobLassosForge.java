@@ -4,11 +4,14 @@ import fuzs.moblassos.data.ModBlockStateProvider;
 import fuzs.moblassos.data.ModItemTagsProvider;
 import fuzs.moblassos.data.ModLanguageProvider;
 import fuzs.moblassos.data.ModRecipeProvider;
+import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.core.CommonFactories;
 import fuzs.puzzleslib.core.ContentRegistrationFlags;
 import net.minecraft.data.DataGenerator;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLConstructModEvent;
@@ -20,6 +23,16 @@ public class MobLassosForge {
     @SubscribeEvent
     public static void onConstructMod(final FMLConstructModEvent evt) {
         CommonFactories.INSTANCE.modConstructor(MobLassos.MOD_ID, ContentRegistrationFlags.BIOMES).accept(new MobLassos());
+        registerHandlers();
+    }
+
+    private static void registerHandlers() {
+        MinecraftForge.EVENT_BUS.addListener((final PlayerInteractEvent.EntityInteract evt) -> {
+            LassoItem.onEntityInteract(evt.getEntity(), evt.getLevel(), evt.getHand(), evt.getTarget()).ifPresent(result -> {
+                evt.setCancellationResult(result);
+                evt.setCanceled(true);
+            });
+        });
     }
 
     @SubscribeEvent
