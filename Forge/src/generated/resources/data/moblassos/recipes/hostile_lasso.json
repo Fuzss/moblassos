@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_ingot"
+    },
+    "&": {
+      "item": "moblassos:golden_lasso"
+    },
+    "+": {
+      "item": "minecraft:blaze_rod"
+    },
+    "X": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    "X+X",
+    "#&#",
+    "X+X"
+  ],
+  "result": {
+    "item": "moblassos:hostile_lasso"
+  }
+}
