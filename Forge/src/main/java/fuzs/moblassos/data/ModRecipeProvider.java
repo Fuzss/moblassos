@@ -23,10 +23,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 .define('#', Items.STRING)
                 .define('X', Items.GOLD_NUGGET)
                 .define('&', Items.ENDER_PEARL)
-                .define('+', Items.LEATHER)
                 .pattern("X#X")
                 .pattern("#&#")
-                .pattern("X+X")
+                .pattern("X#X")
                 .unlockedBy(getHasName(Items.ENDER_PEARL), has(Items.ENDER_PEARL))
                 .save(recipeConsumer);
         ShapedRecipeBuilder.shaped(ModRegistry.AQUA_LASSO_ITEM.get())
@@ -56,9 +55,9 @@ public class ModRecipeProvider extends RecipeProvider {
                 .unlockedBy(getHasName(ModRegistry.GOLDEN_LASSO_ITEM.get()), has(ModRegistry.GOLDEN_LASSO_ITEM.get()))
                 .save(recipeConsumer);
         ShapedRecipeBuilder.shaped(ModRegistry.HOSTILE_LASSO_ITEM.get())
-                .define('#', Items.IRON_INGOT)
+                .define('#', Items.IRON_NUGGET)
                 .define('+', Items.BLAZE_ROD)
-                .define('X', Items.LEATHER)
+                .define('X', Ingredient.of(Items.LEATHER, Items.RABBIT_HIDE))
                 .define('&', ModRegistry.GOLDEN_LASSO_ITEM.get())
                 .pattern("X+X")
                 .pattern("#&#")

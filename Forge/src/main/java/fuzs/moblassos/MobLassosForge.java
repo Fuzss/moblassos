@@ -1,10 +1,7 @@
 package fuzs.moblassos;
 
 import fuzs.moblassos.capability.VillagerContractCapability;
-import fuzs.moblassos.data.ModBlockStateProvider;
-import fuzs.moblassos.data.ModItemTagsProvider;
-import fuzs.moblassos.data.ModLanguageProvider;
-import fuzs.moblassos.data.ModRecipeProvider;
+import fuzs.moblassos.data.*;
 import fuzs.moblassos.init.ModRegistry;
 import fuzs.moblassos.world.item.ContractItem;
 import fuzs.moblassos.world.item.LassoItem;
@@ -65,5 +62,6 @@ public class MobLassosForge {
         dataGenerator.addProvider(true, new ModItemTagsProvider(dataGenerator, MobLassos.MOD_ID, fileHelper));
         dataGenerator.addProvider(true, new ModLanguageProvider(dataGenerator, MobLassos.MOD_ID));
         dataGenerator.addProvider(true, new ModRecipeProvider(dataGenerator, MobLassos.MOD_ID));
+        dataGenerator.addProvider(true, new ModSoundDefinitionsProvider(dataGenerator, MobLassos.MOD_ID, fileHelper));
     }
 }

@@ -25,7 +25,10 @@ public class ServerConfig implements ConfigCore {
     @Config(description = "Percentage of its total health or less a hostile mob must have in order for a hostile lasso to be able to pick it up.")
     @Config.DoubleRange(min = 0.0, max = 1.0)
     public double hostileMobHealth = 0.5;
-    @Config(description = {"Time in seconds after which the player is hurt by half a heart for each carried hostile lasso containing a monster.", "Set to -1 to disable."})
+    @Config(description = {"Time interval in seconds after which the player is hurt by half a heart for carrying any hostile lasso containing a monster.", "Set to -1 to disable."})
     @Config.IntRange(min = -1)
     public int hostileDamageRate = 5;
+    @Config(description = "The chance for a villager to accept a contract allowing it to be captured by an emerald lasso.")
+    @Config.DoubleRange(min = 0.0, max = 1.0)
+    public double villagerAcceptsContractChance = 0.2;
 }

@@ -17,8 +17,11 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Predicate;
 
@@ -26,6 +29,11 @@ public class ContractItem extends Item {
 
     public ContractItem(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+        tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
     }
 
     public static Optional<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
@@ -44,7 +52,7 @@ public class ContractItem extends Item {
                     villager.notifyTradeUpdated(stack);
                     player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".accept", entity.getDisplayName()).withStyle(ChatFormatting.GREEN), true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
-                });
+                }).or(() -> Optional.of(InteractionResult.CONSUME_PARTIAL));
             } else {
                 if (!level.isClientSide) {
                     MobLassos.NETWORKING.sendToAllTracking(new ClientboundVillagerParticlesMessage(entity.getId(), false), entity);
@@ -53,8 +61,8 @@ public class ContractItem extends Item {
                 // just an empty stack for no sound to play
                 villager.notifyTradeUpdated(ItemStack.EMPTY);
                 player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".reject", entity.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                return Optional.of(InteractionResult.sidedSuccess(level.isClientSide));
             }
-            return Optional.of(InteractionResult.CONSUME_PARTIAL);
         }
         return Optional.empty();
     }
@@ -72,12 +80,14 @@ public class ContractItem extends Item {
         }
     }
 
-    public static void addParticlesAroundVillager(AbstractVillager villager, ParticleOptions particleOption) {
-        for (int i = 0; i < 5; ++i) {
-            double d0 = villager.getRandom().nextGaussian() * 0.02D;
-            double d1 = villager.getRandom().nextGaussian() * 0.02D;
-            double d2 = villager.getRandom().nextGaussian() * 0.02D;
-            villager.level.addParticle(particleOption, villager.getRandomX(1.0D), villager.getRandomY() + 1.0D, villager.getRandomZ(1.0D), d0, d1, d2);
+    public static void addParticlesAroundVillager(@Nullable AbstractVillager villager, ParticleOptions particleOption) {
+        if (villager != null) {
+            for (int i = 0; i < 5; ++i) {
+                double d0 = villager.getRandom().nextGaussian() * 0.02D;
+                double d1 = villager.getRandom().nextGaussian() * 0.02D;
+                double d2 = villager.getRandom().nextGaussian() * 0.02D;
+                villager.level.addParticle(particleOption, villager.getRandomX(1.0D), villager.getRandomY() + 1.0D, villager.getRandomZ(1.0D), d0, d1, d2);
+            }
         }
     }
 }

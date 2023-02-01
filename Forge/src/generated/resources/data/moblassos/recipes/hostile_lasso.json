@@ -2,7 +2,7 @@
   "type": "minecraft:crafting_shaped",
   "key": {
     "#": {
-      "item": "minecraft:iron_ingot"
+      "item": "minecraft:iron_nugget"
     },
     "&": {
       "item": "moblassos:golden_lasso"
@@ -10,9 +10,14 @@
     "+": {
       "item": "minecraft:blaze_rod"
     },
-    "X": {
-      "item": "minecraft:leather"
-    }
+    "X": [
+      {
+        "item": "minecraft:leather"
+      },
+      {
+        "item": "minecraft:rabbit_hide"
+      }
+    ]
   },
   "pattern": [
     "X+X",
