@@ -3,6 +3,7 @@ package fuzs.moblassos;
 import fuzs.moblassos.capability.VillagerContractCapability;
 import fuzs.moblassos.data.*;
 import fuzs.moblassos.init.ModRegistry;
+import fuzs.moblassos.init.ModRegistryForge;
 import fuzs.moblassos.world.item.ContractItem;
 import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.capability.ForgeCapabilityController;
@@ -27,6 +28,7 @@ public class MobLassosForge {
     @SubscribeEvent
     public static void onConstructMod(final FMLConstructModEvent evt) {
         CommonFactories.INSTANCE.modConstructor(MobLassos.MOD_ID, ContentRegistrationFlags.BIOMES).accept(new MobLassos());
+        ModRegistryForge.touch();
         registerCapabilities();
         registerHandlers();
     }

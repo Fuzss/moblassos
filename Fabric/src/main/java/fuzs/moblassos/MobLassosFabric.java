@@ -1,5 +1,6 @@
 package fuzs.moblassos;
 
+import fuzs.moblassos.init.ModRegistryFabric;
 import fuzs.moblassos.world.item.ContractItem;
 import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.core.CommonFactories;
@@ -14,6 +15,7 @@ public class MobLassosFabric implements ModInitializer {
     @Override
     public void onInitialize() {
         CommonFactories.INSTANCE.modConstructor(MobLassos.MOD_ID, ContentRegistrationFlags.BIOMES).accept(new MobLassos());
+        ModRegistryFabric.touch();
         registerHandlers();
     }
 

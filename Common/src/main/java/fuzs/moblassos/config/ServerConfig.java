@@ -31,4 +31,7 @@ public class ServerConfig implements ConfigCore {
     @Config(description = "The chance for a villager to accept a contract allowing it to be captured by an emerald lasso.")
     @Config.DoubleRange(min = 0.0, max = 1.0)
     public double villagerAcceptsContractChance = 0.2;
+    @Config(description = "The percentage each level of the holding enchantment will increase a lasso's holding time by.")
+    @Config.DoubleRange(min = 0.0)
+    public double holdingMultiplier = 0.2;
 }

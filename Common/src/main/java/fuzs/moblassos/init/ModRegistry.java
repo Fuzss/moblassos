@@ -22,7 +22,6 @@ import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
@@ -32,12 +31,12 @@ public class ModRegistry {
     public static final CreativeModeTab CREATIVE_MODE_TAB = CommonAbstractions.INSTANCE.creativeModeTab(MobLassos.MOD_ID, () -> new ItemStack(ModRegistry.GOLDEN_LASSO_ITEM.get()));
     public static final EnchantmentCategory LASSO_ENCHANTMENT_CATEGORY = fuzs.moblassos.core.CommonAbstractions.INSTANCE.createEnchantmentCategory(MobLassos.MOD_NAME.toUpperCase(Locale.ROOT).replace(" ", "_") + "_LASSO", item -> item instanceof LassoItem);
     private static final RegistryManager REGISTRY = CommonFactories.INSTANCE.registration(MobLassos.MOD_ID);
-    public static final RegistryReference<Item> GOLDEN_LASSO_ITEM = REGISTRY.registerItem("golden_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB).stacksTo(1), LassoItem.Type.GOLDEN));
-    public static final RegistryReference<Item> AQUA_LASSO_ITEM = REGISTRY.registerItem("aqua_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB).stacksTo(1), LassoItem.Type.AQUA));
-    public static final RegistryReference<Item> DIAMOND_LASSO_ITEM = REGISTRY.registerItem("diamond_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB).stacksTo(1), LassoItem.Type.DIAMOND));
-    public static final RegistryReference<Item> EMERALD_LASSO_ITEM = REGISTRY.registerItem("emerald_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB).stacksTo(1), LassoItem.Type.EMERALD));
-    public static final RegistryReference<Item> HOSTILE_LASSO_ITEM = REGISTRY.registerItem("hostile_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB).stacksTo(1), LassoItem.Type.HOSTILE));
-    public static final RegistryReference<Item> CREATIVE_LASSO_ITEM = REGISTRY.registerItem("creative_lasso", () -> new LassoItem(new Item.Properties().tab(CREATIVE_MODE_TAB).rarity(Rarity.EPIC).stacksTo(1), LassoItem.Type.CREATIVE));
+    public static final RegistryReference<Item> GOLDEN_LASSO_ITEM = REGISTRY.placeholder(Registry.ITEM_REGISTRY, "golden_lasso");
+    public static final RegistryReference<Item> AQUA_LASSO_ITEM = REGISTRY.placeholder(Registry.ITEM_REGISTRY, "aqua_lasso");
+    public static final RegistryReference<Item> DIAMOND_LASSO_ITEM = REGISTRY.placeholder(Registry.ITEM_REGISTRY, "diamond_lasso");
+    public static final RegistryReference<Item> EMERALD_LASSO_ITEM = REGISTRY.placeholder(Registry.ITEM_REGISTRY, "emerald_lasso");
+    public static final RegistryReference<Item> HOSTILE_LASSO_ITEM = REGISTRY.placeholder(Registry.ITEM_REGISTRY, "hostile_lasso");
+    public static final RegistryReference<Item> CREATIVE_LASSO_ITEM = REGISTRY.placeholder(Registry.ITEM_REGISTRY, "creative_lasso");
     public static final RegistryReference<Item> CONTRACT_ITEM = REGISTRY.registerItem("contract", () -> new ContractItem(new Item.Properties().tab(CREATIVE_MODE_TAB).stacksTo(1)));
     public static final RegistryReference<Enchantment> HOLDING_ENCHANTMENT = REGISTRY.registerEnchantment("holding", () -> new HoldingEnchantment(Enchantment.Rarity.UNCOMMON, EquipmentSlot.MAINHAND));
     public static final RegistryReference<SoundEvent> LASSO_PICK_UP_SOUND_EVENT = REGISTRY.registerRawSoundEvent("item.lasso.pick_up");
