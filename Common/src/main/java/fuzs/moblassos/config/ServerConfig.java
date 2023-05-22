@@ -1,7 +1,7 @@
 package fuzs.moblassos.config;
 
-import fuzs.puzzleslib.config.ConfigCore;
-import fuzs.puzzleslib.config.annotation.Config;
+import fuzs.puzzleslib.api.config.v3.Config;
+import fuzs.puzzleslib.api.config.v3.ConfigCore;
 
 public class ServerConfig implements ConfigCore {
     @Config(description = {"Time in seconds for which a golden lasso is able to hold a mob.", "Set to -1 to disable the timer."})

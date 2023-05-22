@@ -2,7 +2,7 @@ package fuzs.moblassos.capability;
 
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.config.ServerConfig;
-import fuzs.puzzleslib.capability.data.CapabilityComponent;
+import fuzs.puzzleslib.api.capability.v2.data.CapabilityComponent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 

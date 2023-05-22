@@ -1,10 +1,10 @@
 package fuzs.moblassos.data;
 
 import fuzs.moblassos.init.ModRegistry;
-import net.minecraft.data.DataGenerator;
+import fuzs.puzzleslib.api.data.v1.AbstractModelProvider;
+import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
@@ -13,10 +13,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Objects;
 
-public class ModBlockStateProvider extends BlockStateProvider {
+public class ModModelProvider extends AbstractModelProvider {
 
-    public ModBlockStateProvider(DataGenerator dataGenerator, String modId, ExistingFileHelper fileHelper) {
-        super(dataGenerator, modId, fileHelper);
+    public ModModelProvider(PackOutput packOutput, String modId, ExistingFileHelper fileHelper) {
+        super(packOutput, modId, fileHelper);
     }
 
     @Override

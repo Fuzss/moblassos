@@ -27,6 +27,9 @@
     ],
     "client": [
       "${clientEntryPoint}"
+    ],
+    "cardinal-components": [
+      "fuzs.puzzleslib.api.capability.v2.initializer.EntityComponentInitializerImpl"
     ]
   },
 
@@ -37,6 +40,8 @@
     "fabricloader": ">=${minFabricVersion}",
     "fabric-api": ">=${minFabricApiVersion}",
     "puzzleslib": ">=${minPuzzlesVersion}",
+    "cardinal-components-base": "*",
+    "cardinal-components-entity": "*",
     "minecraft": "${minecraftVersion}",
     "java": ">=17"
   },

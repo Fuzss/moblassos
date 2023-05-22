@@ -1,9 +1,9 @@
-package fuzs.moblassos.networking;
+package fuzs.moblassos.network;
 
 import fuzs.moblassos.capability.VillagerContractCapability;
 import fuzs.moblassos.init.ModRegistry;
-import fuzs.puzzleslib.api.networking.v3.ClientMessageListener;
-import fuzs.puzzleslib.api.networking.v3.ClientboundMessage;
+import fuzs.puzzleslib.api.network.v3.ClientMessageListener;
+import fuzs.puzzleslib.api.network.v3.ClientboundMessage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;

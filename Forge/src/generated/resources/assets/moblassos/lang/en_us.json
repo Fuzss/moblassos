@@ -12,7 +12,7 @@
   "item.moblassos.diamond_lasso": "Diamond Lasso",
   "item.moblassos.diamond_lasso.desc": "Holds: Any Animals",
   "item.moblassos.emerald_lasso": "Emerald Lasso",
-  "item.moblassos.emerald_lasso.desc": "Holds: Villagers\\nA villager must accept a contract before it can be picked-up. Most villagers will not accept any contract.",
+  "item.moblassos.emerald_lasso.desc": "Holds: Villagers",
   "item.moblassos.golden_lasso": "Golden Lasso",
   "item.moblassos.golden_lasso.desc": "Holds: Animals",
   "item.moblassos.hostile_lasso": "Hostile Lasso",

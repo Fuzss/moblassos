@@ -3,8 +3,10 @@ package fuzs.moblassos.world.item;
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.capability.VillagerContractCapability;
 import fuzs.moblassos.init.ModRegistry;
-import fuzs.moblassos.networking.ClientboundVillagerContractMessage;
-import fuzs.moblassos.networking.ClientboundVillagerParticlesMessage;
+import fuzs.moblassos.network.ClientboundVillagerContractMessage;
+import fuzs.moblassos.network.ClientboundVillagerParticlesMessage;
+import fuzs.puzzleslib.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.network.chat.Component;
@@ -13,6 +15,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -36,7 +39,7 @@ public class ContractItem extends Item {
         tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
     }
 
-    public static Optional<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
+    public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof ContractItem item && entity instanceof AbstractVillager villager && entity.isAlive()) {
             if (VillagerContractCapability.canAcceptContract(entity)) {
@@ -52,7 +55,7 @@ public class ContractItem extends Item {
                     villager.notifyTradeUpdated(stack);
                     player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".accept", entity.getDisplayName()).withStyle(ChatFormatting.GREEN), true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
-                }).or(() -> Optional.of(InteractionResult.CONSUME_PARTIAL));
+                }).or(() -> Optional.of(InteractionResult.CONSUME_PARTIAL)).map(EventResultHolder::interrupt).orElseGet(EventResultHolder::pass);
             } else {
                 if (!level.isClientSide) {
                     MobLassos.NETWORKING.sendToAllTracking(new ClientboundVillagerParticlesMessage(entity.getId(), false), entity);
@@ -61,10 +64,10 @@ public class ContractItem extends Item {
                 // just an empty stack for no sound to play
                 villager.notifyTradeUpdated(ItemStack.EMPTY);
                 player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".reject", entity.getDisplayName()).withStyle(ChatFormatting.RED), true);
-                return Optional.of(InteractionResult.sidedSuccess(level.isClientSide));
+                return EventResultHolder.interrupt(InteractionResult.sidedSuccess(level.isClientSide));
             }
         }
-        return Optional.empty();
+        return EventResultHolder.pass();
     }
 
     private static void setVillagerUnhappy(AbstractVillager villager) {
@@ -74,10 +77,11 @@ public class ContractItem extends Item {
         }
     }
 
-    public static void onEntityJoinServerLevel(Entity entity, ServerLevel level) {
+    public static EventResult onEntityJoinServerLevel(Entity entity, ServerLevel level, @Nullable MobSpawnType spawnType) {
         if (entity instanceof AbstractVillager && ModRegistry.VILLAGER_CONTRACT_CAPABILITY.maybeGet(entity).filter(VillagerContractCapability::hasAcceptedContract).isPresent()) {
             MobLassos.NETWORKING.sendToAllTracking(new ClientboundVillagerContractMessage(entity.getId()), entity);
         }
+        return EventResult.PASS;
     }
 
     public static void addParticlesAroundVillager(@Nullable AbstractVillager villager, ParticleOptions particleOption) {

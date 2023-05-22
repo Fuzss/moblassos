@@ -3,10 +3,11 @@ package fuzs.moblassos.world.item;
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.capability.VillagerContractCapability;
 import fuzs.moblassos.config.ServerConfig;
-import fuzs.moblassos.core.CommonAbstractions;
 import fuzs.moblassos.init.ModRegistry;
 import fuzs.moblassos.util.LassoMobHelper;
-import fuzs.puzzleslib.proxy.Proxy;
+import fuzs.puzzleslib.api.core.v1.CommonAbstractions;
+import fuzs.puzzleslib.api.core.v1.Proxy;
+import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -44,7 +45,6 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -62,7 +62,7 @@ public class LassoItem extends Item {
         this.type = type;
     }
 
-    public static Optional<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
+    public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
         // we do not override the item method, this is called by an event/callback instead to allow overriding interaction implemented on the entity which runs first and might prevent all this
         ItemStack stack = player.getItemInHand(hand);
         if (stack.getItem() instanceof LassoItem item && entity instanceof Mob mob && entity.isAlive()) {
@@ -78,11 +78,11 @@ public class LassoItem extends Item {
                             stack.getTag().putLong(TAG_ENTITY_PICK_UP_TIME, level.getGameTime());
                         }
                     }
-                    return Optional.of(InteractionResult.sidedSuccess(player.level.isClientSide));
+                    return EventResultHolder.interrupt(InteractionResult.sidedSuccess(player.level.isClientSide));
                 }
             }
         }
-        return Optional.empty();
+        return EventResultHolder.pass();
     }
 
     public int getColor(ItemStack stack, int tintIndex) {
@@ -337,7 +337,7 @@ public class LassoItem extends Item {
         }
 
         public boolean canPlayerPickUp(Player player, Mob mob) {
-            if (CommonAbstractions.INSTANCE.isBossMob(mob)) return false;
+            if (CommonAbstractions.INSTANCE.isBossMob(mob.getType())) return false;
             double hostileMobHealth = MobLassos.CONFIG.get(ServerConfig.class).hostileMobHealth;
             if (!mob.getType().is(this.blacklist.get()) && this.mobFilter.test(mob)) {
                 if (this == HOSTILE && mob.getHealth() / mob.getMaxHealth() >= hostileMobHealth) {
