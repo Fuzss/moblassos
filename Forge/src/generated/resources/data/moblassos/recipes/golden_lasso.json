@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moblassos:golden_lasso"
-  }
+  },
+  "show_notification": true
 }

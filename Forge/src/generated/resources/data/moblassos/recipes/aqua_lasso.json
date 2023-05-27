@@ -30,5 +30,6 @@
   ],
   "result": {
     "item": "moblassos:aqua_lasso"
-  }
+  },
+  "show_notification": true
 }

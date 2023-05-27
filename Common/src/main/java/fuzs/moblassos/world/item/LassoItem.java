@@ -20,7 +20,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -106,7 +105,7 @@ public class LassoItem extends Item {
     public InteractionResult useOn(UseOnContext context) {
         if (!this.hasStoredEntity(context.getItemInHand())) return InteractionResult.PASS;
         Level level = context.getLevel();
-        if (!(level instanceof ServerLevel)) {
+        if (level.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
             ItemStack itemStack = context.getItemInHand();
@@ -188,7 +187,7 @@ public class LassoItem extends Item {
         if (this.type == Type.HOSTILE && this.hasStoredEntity(stack)) {
             int hostileDamageRate = MobLassos.CONFIG.get(ServerConfig.class).hostileDamageRate;
             if (hostileDamageRate != -1 && level.getGameTime() % (hostileDamageRate * 20L) == 0) {
-                entity.hurt(DamageSource.MAGIC, 1.0F);
+                entity.hurt(level.damageSources().magic(), 1.0F);
             }
         }
         if (this.type.hasMaxHoldingTime() && stack.hasTag()) {
@@ -248,6 +247,9 @@ public class LassoItem extends Item {
             tooltipComponents.add(component.withStyle(ChatFormatting.BLUE));
         } else {
             tooltipComponents.add(Component.translatable(this.getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
+            if (ModRegistry.EMERALD_LASSO_ITEM.isPresent() && this == ModRegistry.EMERALD_LASSO_ITEM.get()) {
+                tooltipComponents.add(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".desc").withStyle(ChatFormatting.GRAY));
+            }
         }
         if (isAdvanced.isAdvanced() && stack.hasTag() && MobLassos.CONFIG.getHolder(ServerConfig.class).isAvailable()) {
             boolean hasPickUpTime = stack.getTag().contains(TAG_ENTITY_PICK_UP_TIME, Tag.TAG_LONG);

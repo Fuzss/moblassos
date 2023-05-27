@@ -19,5 +19,6 @@
   ],
   "result": {
     "item": "moblassos:diamond_lasso"
-  }
+  },
+  "show_notification": true
 }

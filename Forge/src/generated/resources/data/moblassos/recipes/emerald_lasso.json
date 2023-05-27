@@ -16,5 +16,6 @@
   ],
   "result": {
     "item": "moblassos:emerald_lasso"
-  }
+  },
+  "show_notification": true
 }

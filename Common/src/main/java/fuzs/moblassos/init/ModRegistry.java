@@ -40,13 +40,13 @@ public class ModRegistry {
     private static final CapabilityController CAPABILITY = CapabilityController.from(MobLassos.MOD_ID);
     public static final CapabilityKey<VillagerContractCapability> VILLAGER_CONTRACT_CAPABILITY = CAPABILITY.registerEntityCapability("villager_contract", VillagerContractCapability.class, entity -> new VillagerContractCapabilityImpl(), AbstractVillager.class);
 
-    public static final TagKey<Item> LASSOS_ITEM_TAG = REGISTRY.createItemTag("lassos");
-    public static final TagKey<EntityType<?>> GOLDEN_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.createEntityTypeTag("golden_lasso_blacklist");
-    public static final TagKey<EntityType<?>> AQUA_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.createEntityTypeTag("aqua_lasso_blacklist");
-    public static final TagKey<EntityType<?>> DIAMOND_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.createEntityTypeTag("diamond_lasso_blacklist");
-    public static final TagKey<EntityType<?>> EMERALD_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.createEntityTypeTag("emerald_lasso_blacklist");
-    public static final TagKey<EntityType<?>> HOSTILE_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.createEntityTypeTag("hostile_lasso_blacklist");
-    public static final TagKey<EntityType<?>> CREATIVE_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.createEntityTypeTag("creative_lasso_blacklist");
+    public static final TagKey<Item> LASSOS_ITEM_TAG = REGISTRY.registerItemTag("lassos");
+    public static final TagKey<EntityType<?>> GOLDEN_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.registerEntityTypeTag("golden_lasso_blacklist");
+    public static final TagKey<EntityType<?>> AQUA_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.registerEntityTypeTag("aqua_lasso_blacklist");
+    public static final TagKey<EntityType<?>> DIAMOND_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.registerEntityTypeTag("diamond_lasso_blacklist");
+    public static final TagKey<EntityType<?>> EMERALD_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.registerEntityTypeTag("emerald_lasso_blacklist");
+    public static final TagKey<EntityType<?>> HOSTILE_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.registerEntityTypeTag("hostile_lasso_blacklist");
+    public static final TagKey<EntityType<?>> CREATIVE_LASSO_BLACKLIST_ENTITY_TYPE_TAG = REGISTRY.registerEntityTypeTag("creative_lasso_blacklist");
 
     public static void touch() {
 

@@ -49,7 +49,7 @@ public class ContractItem extends Item {
                         if (!player.getAbilities().instabuild) {
                             stack.shrink(1);
                         }
-                        MobLassos.NETWORKING.sendToAllTracking(new ClientboundVillagerParticlesMessage(entity.getId(), true), entity);
+                        MobLassos.NETWORKING.sendToAllTracking(entity, new ClientboundVillagerParticlesMessage(entity.getId(), true));
                     }
                     // must just not be empty for yes sound to play, so any stack is ok basically
                     villager.notifyTradeUpdated(stack);
@@ -58,7 +58,7 @@ public class ContractItem extends Item {
                 }).or(() -> Optional.of(InteractionResult.CONSUME_PARTIAL)).map(EventResultHolder::interrupt).orElseGet(EventResultHolder::pass);
             } else {
                 if (!level.isClientSide) {
-                    MobLassos.NETWORKING.sendToAllTracking(new ClientboundVillagerParticlesMessage(entity.getId(), false), entity);
+                    MobLassos.NETWORKING.sendToAllTracking(entity, new ClientboundVillagerParticlesMessage(entity.getId(), false));
                 }
                 setVillagerUnhappy(villager);
                 // just an empty stack for no sound to play
@@ -79,7 +79,7 @@ public class ContractItem extends Item {
 
     public static EventResult onEntityJoinServerLevel(Entity entity, ServerLevel level, @Nullable MobSpawnType spawnType) {
         if (entity instanceof AbstractVillager && ModRegistry.VILLAGER_CONTRACT_CAPABILITY.maybeGet(entity).filter(VillagerContractCapability::hasAcceptedContract).isPresent()) {
-            MobLassos.NETWORKING.sendToAllTracking(new ClientboundVillagerContractMessage(entity.getId()), entity);
+            MobLassos.NETWORKING.sendToAllTracking(entity, new ClientboundVillagerContractMessage(entity.getId()));
         }
         return EventResult.PASS;
     }

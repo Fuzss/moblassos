@@ -9,7 +9,7 @@ import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.api.core.v1.context.CreativeModeTabContext;
-import fuzs.puzzleslib.api.event.v1.entity.EntityLevelEvents;
+import fuzs.puzzleslib.api.event.v1.entity.ServerEntityLevelEvents;
 import fuzs.puzzleslib.api.event.v1.entity.player.PlayerInteractEvents;
 import fuzs.puzzleslib.api.item.v2.CreativeModeTabConfigurator;
 import fuzs.puzzleslib.api.network.v3.NetworkHandlerV3;
@@ -34,12 +34,12 @@ public class MobLassos implements ModConstructor {
     private static void registerHandlers() {
         PlayerInteractEvents.USE_ENTITY.register(LassoItem::onEntityInteract);
         PlayerInteractEvents.USE_ENTITY.register(ContractItem::onEntityInteract);
-        EntityLevelEvents.LOAD.register(ContractItem::onEntityJoinServerLevel);
+        ServerEntityLevelEvents.LOAD.register(ContractItem::onEntityJoinServerLevel);
     }
 
     @Override
     public void onRegisterCreativeModeTabs(CreativeModeTabContext context) {
-        context.registerCreativeModeTab(CreativeModeTabConfigurator.from(MOD_ID).icon(() -> new ItemStack(ModRegistry.GOLDEN_LASSO_ITEM.get())).displayItems((featureFlagSet, output, bl) -> {
+        context.registerCreativeModeTab(CreativeModeTabConfigurator.from(MOD_ID).icon(() -> new ItemStack(ModRegistry.GOLDEN_LASSO_ITEM.get())).displayItems((itemDisplayParameters, output) -> {
             output.accept(ModRegistry.GOLDEN_LASSO_ITEM.get());
             output.accept(ModRegistry.AQUA_LASSO_ITEM.get());
             output.accept(ModRegistry.DIAMOND_LASSO_ITEM.get());
