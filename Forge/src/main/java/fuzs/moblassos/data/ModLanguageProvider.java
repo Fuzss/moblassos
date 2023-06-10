@@ -28,7 +28,7 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
         this.add(ModRegistry.CREATIVE_LASSO_ITEM.get(), "Creative Lasso");
         this.addAdditional(ModRegistry.CREATIVE_LASSO_ITEM.get(), "desc", "Holds: Any");
         this.add(ModRegistry.CONTRACT_ITEM.get(), "Contract");
-        this.addAdditional(ModRegistry.CONTRACT_ITEM.get(), "desc", "A villager must accept a contract before it can be picked-up in an emerald lasso. Most villagers will not accept any contract.");
+        this.addAdditional(ModRegistry.CONTRACT_ITEM.get(), "desc", "Villagers must accept a contract before picking-up in an emerald lasso. Leveling up increases the chance to accept.");
         this.add(ModRegistry.HOLDING_ENCHANTMENT.get(), "Holding");
         this.addAdditional(ModRegistry.HOLDING_ENCHANTMENT.get(), "desc", "Increases the time a lasso is able to hold a mob.");
         this.add(ModRegistry.HOSTILE_LASSO_ITEM.get().getDescriptionId() + ".hostile", "%s must be below %s health (currently %s)");

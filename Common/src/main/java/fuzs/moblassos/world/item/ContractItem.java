@@ -17,6 +17,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.npc.AbstractVillager;
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -41,8 +42,16 @@ public class ContractItem extends Item {
 
     public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
         ItemStack stack = player.getItemInHand(hand);
-        if (stack.getItem() instanceof ContractItem item && entity instanceof AbstractVillager villager && entity.isAlive()) {
-            if (VillagerContractCapability.canAcceptContract(entity)) {
+        if (stack.getItem() instanceof ContractItem && entity instanceof AbstractVillager abstractVillager && entity.isAlive()) {
+            Component displayName;
+            if (abstractVillager instanceof Villager villager) {
+                // include villager level as a hint that it's relevant for accepting a contract
+                Component merchantLevel = Component.translatable("merchant.level." + villager.getVillagerData().getLevel());
+                displayName = Component.empty().append(entity.getDisplayName()).append(" (").append(merchantLevel).append(")");
+            } else {
+                displayName = entity.getDisplayName();
+            }
+            if (VillagerContractCapability.canAcceptContract(abstractVillager)) {
                 return ModRegistry.VILLAGER_CONTRACT_CAPABILITY.maybeGet(entity).filter(Predicate.not(VillagerContractCapability::hasAcceptedContract)).map(capability -> {
                     capability.acceptContract();
                     if (!level.isClientSide) {
@@ -52,18 +61,18 @@ public class ContractItem extends Item {
                         MobLassos.NETWORKING.sendToAllTracking(entity, new ClientboundVillagerParticlesMessage(entity.getId(), true));
                     }
                     // must just not be empty for yes sound to play, so any stack is ok basically
-                    villager.notifyTradeUpdated(stack);
-                    player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".accept", entity.getDisplayName()).withStyle(ChatFormatting.GREEN), true);
+                    abstractVillager.notifyTradeUpdated(stack);
+                    player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".accept", displayName).withStyle(ChatFormatting.GREEN), true);
                     return InteractionResult.sidedSuccess(level.isClientSide);
                 }).or(() -> Optional.of(InteractionResult.CONSUME_PARTIAL)).map(EventResultHolder::interrupt).orElseGet(EventResultHolder::pass);
             } else {
                 if (!level.isClientSide) {
                     MobLassos.NETWORKING.sendToAllTracking(entity, new ClientboundVillagerParticlesMessage(entity.getId(), false));
                 }
-                setVillagerUnhappy(villager);
+                setVillagerUnhappy(abstractVillager);
                 // just an empty stack for no sound to play
-                villager.notifyTradeUpdated(ItemStack.EMPTY);
-                player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".reject", entity.getDisplayName()).withStyle(ChatFormatting.RED), true);
+                abstractVillager.notifyTradeUpdated(ItemStack.EMPTY);
+                player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.get().getDescriptionId() + ".reject", displayName).withStyle(ChatFormatting.RED), true);
                 return EventResultHolder.interrupt(InteractionResult.sidedSuccess(level.isClientSide));
             }
         }
@@ -72,7 +81,7 @@ public class ContractItem extends Item {
 
     private static void setVillagerUnhappy(AbstractVillager villager) {
         villager.setUnhappyCounter(40);
-        if (!villager.level.isClientSide()) {
+        if (!villager.level().isClientSide()) {
             villager.playSound(SoundEvents.VILLAGER_NO, 1.0F, villager.getVoicePitch());
         }
     }
@@ -90,7 +99,7 @@ public class ContractItem extends Item {
                 double d0 = villager.getRandom().nextGaussian() * 0.02D;
                 double d1 = villager.getRandom().nextGaussian() * 0.02D;
                 double d2 = villager.getRandom().nextGaussian() * 0.02D;
-                villager.level.addParticle(particleOption, villager.getRandomX(1.0D), villager.getRandomY() + 1.0D, villager.getRandomZ(1.0D), d0, d1, d2);
+                villager.level().addParticle(particleOption, villager.getRandomX(1.0D), villager.getRandomY() + 1.0D, villager.getRandomZ(1.0D), d0, d1, d2);
             }
         }
     }

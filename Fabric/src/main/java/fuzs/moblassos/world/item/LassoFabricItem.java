@@ -13,6 +13,6 @@ public class LassoFabricItem extends LassoItem implements FabricItem {
 
     @Override
     public boolean allowNbtUpdateAnimation(Player player, InteractionHand hand, ItemStack oldStack, ItemStack newStack) {
-        return !ItemStack.isSame(oldStack, newStack);
+        return !ItemStack.isSameItem(oldStack, newStack);
     }
 }

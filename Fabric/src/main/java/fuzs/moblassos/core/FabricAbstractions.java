@@ -1,6 +1,6 @@
 package fuzs.moblassos.core;
 
-import fuzs.extensibleenums.core.EnumFactories;
+import fuzs.extensibleenums.api.extensibleenums.v1.BuiltInEnumFactories;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 
@@ -10,6 +10,6 @@ public class FabricAbstractions implements CommonAbstractions {
 
     @Override
     public EnchantmentCategory createEnchantmentCategory(String internalName, Predicate<Item> canApplyTo) {
-        return EnumFactories.createEnchantmentCategory(internalName, canApplyTo);
+        return BuiltInEnumFactories.createEnchantmentCategory(internalName, canApplyTo);
     }
 }

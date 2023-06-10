@@ -30,5 +30,6 @@
     "recipes": [
       "moblassos:diamond_lasso"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }

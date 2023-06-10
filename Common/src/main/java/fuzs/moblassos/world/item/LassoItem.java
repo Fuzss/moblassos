@@ -67,7 +67,7 @@ public class LassoItem extends Item {
         if (stack.getItem() instanceof LassoItem item && entity instanceof Mob mob && entity.isAlive()) {
             if (!stack.hasTag() || !stack.getTag().contains(TAG_ENTITY_RELEASE_TIME, Tag.TAG_LONG)) {
                 if (!item.hasStoredEntity(stack) && item.type.canPlayerPickUp(player, mob)) {
-                    if (!player.level.isClientSide) {
+                    if (!player.level().isClientSide) {
                         entity.playSound(ModRegistry.LASSO_PICK_UP_SOUND_EVENT.get());
                         if (entity.hasCustomName()) stack.setHoverName(entity.getCustomName());
                         CompoundTag tag = LassoMobHelper.saveEntity(entity);
@@ -77,7 +77,7 @@ public class LassoItem extends Item {
                             stack.getTag().putLong(TAG_ENTITY_PICK_UP_TIME, level.getGameTime());
                         }
                     }
-                    return EventResultHolder.interrupt(InteractionResult.sidedSuccess(player.level.isClientSide));
+                    return EventResultHolder.interrupt(InteractionResult.sidedSuccess(player.level().isClientSide));
                 }
             }
         }
@@ -287,7 +287,7 @@ public class LassoItem extends Item {
         ItemStack stack = itemEntity.getItem();
         if (this.hasStoredEntity(stack)) {
             CompoundTag storedEntity = stack.getTagElement(TAG_STORED_ENTITY);
-            this.releaseContentAt(storedEntity, itemEntity.level, itemEntity.blockPosition(), stack);
+            this.releaseContentAt(storedEntity, itemEntity.level(), itemEntity.blockPosition(), stack);
         }
     }
 

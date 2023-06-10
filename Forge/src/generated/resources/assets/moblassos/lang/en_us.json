@@ -5,7 +5,7 @@
   "item.moblassos.aqua_lasso.desc": "Holds: Water Animals",
   "item.moblassos.contract": "Contract",
   "item.moblassos.contract.accept": "%s accepts the contract",
-  "item.moblassos.contract.desc": "A villager must accept a contract before it can be picked-up in an emerald lasso. Most villagers will not accept any contract.",
+  "item.moblassos.contract.desc": "Villagers must accept a contract before picking-up in an emerald lasso. Leveling up increases the chance to accept.",
   "item.moblassos.contract.reject": "%s rejects the contract",
   "item.moblassos.creative_lasso": "Creative Lasso",
   "item.moblassos.creative_lasso.desc": "Holds: Any",

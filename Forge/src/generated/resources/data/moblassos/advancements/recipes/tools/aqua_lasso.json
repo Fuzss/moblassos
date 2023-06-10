@@ -30,5 +30,6 @@
     "recipes": [
       "moblassos:aqua_lasso"
     ]
-  }
+  },
+  "sends_telemetry_event": false
 }
