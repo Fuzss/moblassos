@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X+X",
+    "#\u0026#",
+    "X+X"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:iron_nugget"
+    },
+    "+": {
+      "item": "minecraft:blaze_rod"
+    },
+    "X": [
+      {
+        "item": "minecraft:leather"
+      },
+      {
+        "item": "minecraft:rabbit_hide"
+      }
+    ],
+    "\u0026": {
+      "item": "moblassos:golden_lasso"
+    }
+  },
+  "result": {
+    "item": "moblassos:hostile_lasso"
+  }
+}

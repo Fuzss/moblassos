@@ -77,9 +77,9 @@ public class LassoItem extends Item {
                             stack.getTag().putLong(TAG_ENTITY_PICK_UP_TIME, level.getGameTime());
                         }
                     }
-                    return EventResultHolder.interrupt(InteractionResult.sidedSuccess(player.level().isClientSide));
                 }
             }
+            return EventResultHolder.interrupt(InteractionResult.sidedSuccess(player.level().isClientSide));
         }
         return EventResultHolder.pass();
     }

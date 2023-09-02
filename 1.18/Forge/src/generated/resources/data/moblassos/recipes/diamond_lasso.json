@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "X#\u0026",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:diamond"
+    },
+    "\u0026": {
+      "item": "moblassos:golden_lasso"
+    },
+    "X": {
+      "item": "moblassos:aqua_lasso"
+    }
+  },
+  "result": {
+    "item": "moblassos:diamond_lasso"
+  }
+}

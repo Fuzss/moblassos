@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " # ",
+    "#\u0026#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:emerald"
+    },
+    "\u0026": {
+      "item": "moblassos:golden_lasso"
+    }
+  },
+  "result": {
+    "item": "moblassos:emerald_lasso"
+  }
+}

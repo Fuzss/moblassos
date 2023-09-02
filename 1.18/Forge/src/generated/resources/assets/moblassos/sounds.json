@@ -1,0 +1,20 @@
+{
+  "item.lasso.pick_up": {
+    "subtitle": "subtitles.item.lasso.pick_up",
+    "sounds": [
+      {
+        "name": "block.beehive.enter",
+        "type": "event"
+      }
+    ]
+  },
+  "item.lasso.release": {
+    "subtitle": "subtitles.item.lasso.release",
+    "sounds": [
+      {
+        "name": "block.beehive.exit",
+        "type": "event"
+      }
+    ]
+  }
+}

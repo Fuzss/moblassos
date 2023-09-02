@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "moblassos:hostile_lasso"
+    ]
+  },
+  "criteria": {
+    "has_golden_lasso": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "moblassos:golden_lasso"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "moblassos:hostile_lasso"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_golden_lasso",
+      "has_the_recipe"
+    ]
+  ]
+}

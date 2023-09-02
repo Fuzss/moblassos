@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " X ",
+    "#\u0026#",
+    " X "
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "minecraft:cod"
+      },
+      {
+        "item": "minecraft:salmon"
+      },
+      {
+        "item": "minecraft:pufferfish"
+      },
+      {
+        "item": "minecraft:tropical_fish"
+      }
+    ],
+    "X": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "\u0026": {
+      "item": "moblassos:golden_lasso"
+    }
+  },
+  "result": {
+    "item": "moblassos:aqua_lasso"
+  }
+}

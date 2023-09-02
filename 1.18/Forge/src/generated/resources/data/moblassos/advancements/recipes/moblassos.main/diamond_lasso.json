@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:recipes/root",
+  "rewards": {
+    "recipes": [
+      "moblassos:diamond_lasso"
+    ]
+  },
+  "criteria": {
+    "has_aqua_lasso": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "moblassos:aqua_lasso"
+            ]
+          }
+        ]
+      }
+    },
+    "has_the_recipe": {
+      "trigger": "minecraft:recipe_unlocked",
+      "conditions": {
+        "recipe": "moblassos:diamond_lasso"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_aqua_lasso",
+      "has_the_recipe"
+    ]
+  ]
+}
