@@ -2,23 +2,48 @@ package fuzs.moblassos.capability;
 
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.config.ServerConfig;
-import fuzs.puzzleslib.api.capability.v2.data.CapabilityComponent;
+import fuzs.puzzleslib.api.capability.v3.data.CapabilityComponent;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 
-public interface VillagerContractCapability extends CapabilityComponent {
+public class VillagerContractCapability extends CapabilityComponent<AbstractVillager> {
+    public static final String TAG_ACCEPTED_CONTRACT = "AcceptedContract";
 
-    void acceptContract();
+    private boolean acceptedContract;
 
-    boolean hasAcceptedContract();
+    public void acceptContract() {
+        if (!this.acceptedContract) {
+            this.acceptedContract = true;
+            this.setChanged();
+        }
+    }
 
-    static boolean canAcceptContract(AbstractVillager abstractVillager) {
-        if (!MobLassos.CONFIG.get(ServerConfig.class).villagerAcceptsContract) return false;
-        if (abstractVillager instanceof Villager villager) {
-            return Math.abs(villager.getUUID().getLeastSignificantBits() % VillagerData.MAX_VILLAGER_LEVEL) < villager.getVillagerData().getLevel();
+    public boolean hasAcceptedContract() {
+        return this.acceptedContract;
+    }
+
+    @Override
+    public void write(CompoundTag tag) {
+        tag.putBoolean(TAG_ACCEPTED_CONTRACT, this.acceptedContract);
+    }
+
+    @Override
+    public void read(CompoundTag tag) {
+        this.acceptedContract = tag.getBoolean(TAG_ACCEPTED_CONTRACT);
+    }
+
+    public static boolean canAcceptContract(AbstractVillager abstractVillager) {
+        if (MobLassos.CONFIG.get(ServerConfig.class).villagerAcceptsContract) {
+            if (abstractVillager instanceof Villager villager) {
+                return Math.abs(villager.getUUID().getLeastSignificantBits() % VillagerData.MAX_VILLAGER_LEVEL) <
+                        villager.getVillagerData().getLevel();
+            } else {
+                return true;
+            }
         } else {
-            return true;
+            return false;
         }
     }
 }

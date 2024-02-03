@@ -1,8 +1,0 @@
-{
-  "parent": "minecraft:item/generated",
-  "textures": {
-    "layer0": "moblassos:item/aqua_lasso",
-    "layer1": "moblassos:item/lasso_overlay_light",
-    "layer2": "moblassos:item/lasso_overlay_dark"
-  }
-}

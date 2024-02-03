@@ -2,14 +2,12 @@ package fuzs.moblassos;
 
 import fuzs.moblassos.config.ServerConfig;
 import fuzs.moblassos.init.ModRegistry;
-import fuzs.moblassos.network.ClientboundVillagerContractMessage;
 import fuzs.moblassos.network.ClientboundVillagerParticlesMessage;
 import fuzs.moblassos.world.item.ContractItem;
 import fuzs.moblassos.world.item.LassoItem;
 import fuzs.puzzleslib.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.api.core.v1.context.CreativeModeTabContext;
-import fuzs.puzzleslib.api.event.v1.entity.ServerEntityLevelEvents;
 import fuzs.puzzleslib.api.event.v1.entity.player.PlayerInteractEvents;
 import fuzs.puzzleslib.api.item.v2.CreativeModeTabConfigurator;
 import fuzs.puzzleslib.api.network.v3.NetworkHandlerV3;
@@ -23,7 +21,8 @@ public class MobLassos implements ModConstructor {
     public static final String MOD_NAME = "Mob Lassos";
     public static final Logger LOGGER = LogManager.getLogger(MOD_NAME);
     public static final ConfigHolder CONFIG = ConfigHolder.builder(MOD_ID).server(ServerConfig.class);
-    public static final NetworkHandlerV3 NETWORKING = NetworkHandlerV3.builder(MOD_ID).registerClientbound(ClientboundVillagerContractMessage.class).registerClientbound(ClientboundVillagerParticlesMessage.class);
+    public static final NetworkHandlerV3 NETWORKING = NetworkHandlerV3.builder(MOD_ID)
+            .registerClientbound(ClientboundVillagerParticlesMessage.class);
 
     @Override
     public void onConstructMod() {
@@ -34,20 +33,21 @@ public class MobLassos implements ModConstructor {
     private static void registerHandlers() {
         PlayerInteractEvents.USE_ENTITY.register(LassoItem::onEntityInteract);
         PlayerInteractEvents.USE_ENTITY.register(ContractItem::onEntityInteract);
-        ServerEntityLevelEvents.LOAD.register(ContractItem::onEntityJoinServerLevel);
     }
 
     @Override
     public void onRegisterCreativeModeTabs(CreativeModeTabContext context) {
-        context.registerCreativeModeTab(CreativeModeTabConfigurator.from(MOD_ID).icon(() -> new ItemStack(ModRegistry.GOLDEN_LASSO_ITEM.get())).displayItems((itemDisplayParameters, output) -> {
-            output.accept(ModRegistry.GOLDEN_LASSO_ITEM.get());
-            output.accept(ModRegistry.AQUA_LASSO_ITEM.get());
-            output.accept(ModRegistry.DIAMOND_LASSO_ITEM.get());
-            output.accept(ModRegistry.EMERALD_LASSO_ITEM.get());
-            output.accept(ModRegistry.HOSTILE_LASSO_ITEM.get());
-            output.accept(ModRegistry.CREATIVE_LASSO_ITEM.get());
-            output.accept(ModRegistry.CONTRACT_ITEM.get());
-        }));
+        context.registerCreativeModeTab(CreativeModeTabConfigurator.from(MOD_ID)
+                .icon(() -> new ItemStack(ModRegistry.GOLDEN_LASSO_ITEM.value()))
+                .displayItems((itemDisplayParameters, output) -> {
+                    output.accept(ModRegistry.GOLDEN_LASSO_ITEM.value());
+                    output.accept(ModRegistry.AQUA_LASSO_ITEM.value());
+                    output.accept(ModRegistry.DIAMOND_LASSO_ITEM.value());
+                    output.accept(ModRegistry.EMERALD_LASSO_ITEM.value());
+                    output.accept(ModRegistry.HOSTILE_LASSO_ITEM.value());
+                    output.accept(ModRegistry.CREATIVE_LASSO_ITEM.value());
+                    output.accept(ModRegistry.CONTRACT_ITEM.value());
+                }));
     }
 
     public static ResourceLocation id(String path) {
