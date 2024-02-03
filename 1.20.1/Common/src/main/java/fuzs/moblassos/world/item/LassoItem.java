@@ -153,7 +153,7 @@ public class LassoItem extends Item {
 
     private boolean releaseContentAt(CompoundTag tag, Level level, BlockPos pos, ItemStack stack) {
         if (!level.isClientSide && !tag.isEmpty()) {
-            this.maybeRemoveUUID(tag, (ServerLevel) level);
+            LassoMobHelper.removeTagKeys((ServerLevel) level, tag);
             return EntityType.create(tag, level).map((entity) -> {
 
                 LassoMobHelper.moveEntityTo(entity, level, pos, true);
@@ -172,14 +172,6 @@ public class LassoItem extends Item {
         }
 
         return false;
-    }
-
-    private void maybeRemoveUUID(CompoundTag tag, ServerLevel level) {
-        if (level.getEntity(tag.getUUID(Entity.UUID_TAG)) != null) {
-            // causes an issue with duplicate uuids when the lasso stack is copied in creative mode,
-            // but we should not always remove the uuid as we rely on it for the villager contract
-            tag.remove(Entity.UUID_TAG);
-        }
     }
 
     @Override
