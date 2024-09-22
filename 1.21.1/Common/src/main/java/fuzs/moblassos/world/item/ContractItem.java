@@ -1,7 +1,6 @@
 package fuzs.moblassos.world.item;
 
 import fuzs.moblassos.MobLassos;
-import fuzs.moblassos.capability.VillagerContractCapability;
 import fuzs.moblassos.init.ModRegistry;
 import fuzs.moblassos.network.ClientboundVillagerParticlesMessage;
 import fuzs.puzzleslib.api.core.v1.Proxy;
@@ -9,17 +8,18 @@ import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.util.Unit;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.npc.Villager;
+import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class ContractItem extends Item {
     }
 
     @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
         tooltipComponents.addAll(Proxy.INSTANCE.splitTooltipLines(this.getDescriptionComponent()));
     }
 
@@ -41,18 +41,16 @@ public class ContractItem extends Item {
     public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
 
         ItemStack itemInHand = player.getItemInHand(hand);
-        if (itemInHand.is(ModRegistry.CONTRACT_ITEM.value()) &&
-                entity instanceof AbstractVillager abstractVillager &&
+        if (itemInHand.is(ModRegistry.CONTRACT_ITEM.value()) && entity instanceof AbstractVillager abstractVillager &&
                 abstractVillager.isAlive()) {
 
-            if (VillagerContractCapability.canAcceptContract(abstractVillager)) {
+            if (canAcceptContract(abstractVillager)) {
 
-                VillagerContractCapability capability = ModRegistry.VILLAGER_CONTRACT_CAPABILITY.get(abstractVillager);
-                if (!capability.hasAcceptedContract()) {
+                if (!ModRegistry.VILLAGER_CONTRACT_ATTACHMENT_TYPE.has(abstractVillager)) {
 
                     if (!level.isClientSide) {
 
-                        capability.acceptContract();
+                        ModRegistry.VILLAGER_CONTRACT_ATTACHMENT_TYPE.set(abstractVillager, Unit.INSTANCE);
 
                         if (!player.getAbilities().instabuild) {
 
@@ -88,14 +86,15 @@ public class ContractItem extends Item {
             // must just not be empty for yes sound to play, so any stack is ok basically
             // just an empty stack for no sound to play
             abstractVillager.notifyTradeUpdated(itemInHand);
-            MobLassos.NETWORKING.sendToAllTracking(abstractVillager,
-                    new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles),
-                    false
+            MobLassos.NETWORK.sendToAllTracking(abstractVillager,
+                    new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles), false
             );
         }
         Component displayName = getVillagerDisplayName(abstractVillager);
-        player.displayClientMessage(Component.translatable(ModRegistry.CONTRACT_ITEM.value()
-                .getDescriptionId() + "." + (happyParticles ? "accept" : "reject"), displayName).withStyle(happyParticles ? ChatFormatting.GREEN : ChatFormatting.RED), true);
+        player.displayClientMessage(Component.translatable(
+                ModRegistry.CONTRACT_ITEM.value().getDescriptionId() + "." + (happyParticles ? "accept" : "reject"),
+                displayName
+        ).withStyle(happyParticles ? ChatFormatting.GREEN : ChatFormatting.RED), true);
     }
 
     private static Component getVillagerDisplayName(AbstractVillager abstractVillager) {
@@ -109,6 +108,15 @@ public class ContractItem extends Item {
                     .append(")");
         } else {
             return abstractVillager.getDisplayName();
+        }
+    }
+
+    public static boolean canAcceptContract(AbstractVillager abstractVillager) {
+        if (abstractVillager instanceof Villager villager) {
+            return Math.abs(villager.getUUID().getLeastSignificantBits() % VillagerData.MAX_VILLAGER_LEVEL) <
+                    villager.getVillagerData().getLevel();
+        } else {
+            return true;
         }
     }
 }

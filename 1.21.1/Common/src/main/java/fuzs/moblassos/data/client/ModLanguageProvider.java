@@ -29,13 +29,11 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
         builder.add(ModRegistry.CREATIVE_LASSO_ITEM.value(), "Creative Lasso");
         builder.add(ModRegistry.CREATIVE_LASSO_ITEM.value(), "desc", "Holds: Any");
         builder.add(ModRegistry.CONTRACT_ITEM.value(), "Contract");
-        builder.add(ModRegistry.CONTRACT_ITEM.value(),
-                "desc",
+        builder.add(ModRegistry.CONTRACT_ITEM.value(), "desc",
                 "Allows picking-up villagers in an emerald lasso. Leveling up increases the chance to accept."
         );
-        builder.add(ModRegistry.HOLDING_ENCHANTMENT.value(), "Holding");
-        builder.add(ModRegistry.HOLDING_ENCHANTMENT.value(),
-                "desc",
+        builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT, "Holding");
+        builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT, "desc",
                 "Increases the time a lasso is able to hold a mob."
         );
         builder.add(LassoType.GOLDEN.getFailureTranslationKey(), "%s cannot be captured");

@@ -1,13 +1,13 @@
-// 1.20.4	2024-02-03T10:44:55.414485	Recipes
-6b3bdae091b5b094bcf04b2fa6e15f478a8a4ea1 data/moblassos/advancements/recipes/tools/aqua_lasso.json
-73a1c36f476cf804a3a8f8bd8474b956ccf6458f data/moblassos/advancements/recipes/tools/contract.json
-ea472296b4479e24f19a8ea1b0369d99f3aadc6b data/moblassos/advancements/recipes/tools/diamond_lasso.json
-c2ae2e89973601bb40c7d4d4a99b116abf48d80c data/moblassos/advancements/recipes/tools/emerald_lasso.json
-1b2f1786325cc6fca2e879c2898f4cdc051a1bae data/moblassos/advancements/recipes/tools/golden_lasso.json
-0e43256cb339b22fc885d3866b1e38e1cfcd5dfe data/moblassos/advancements/recipes/tools/hostile_lasso.json
-8683193b535099268f3d1ae046a3fbf808a76e09 data/moblassos/recipes/aqua_lasso.json
-f1713f87b80df9f13132bf79468dba6064b5aab5 data/moblassos/recipes/contract.json
-2cd8814bf76e0f64f65e77ef7ea261eca3c4b239 data/moblassos/recipes/diamond_lasso.json
-f8b876ed5f75daf4e8ea89ad8f5c35c6ad618c15 data/moblassos/recipes/emerald_lasso.json
-2d2b640a2fc9f528937d9f436f569351412db1aa data/moblassos/recipes/golden_lasso.json
-900b36c9cb3c84eae7443fc51f9c6d75a697ea00 data/moblassos/recipes/hostile_lasso.json
+// 1.21.1	2024-09-21T22:31:35.207954	Recipes
+5fab02625fef16e93a2ae20481cfada78c886fa9 data/moblassos/advancement/recipes/tools/aqua_lasso.json
+cf116b7988379c820b798f5adb59cb57ff7dd474 data/moblassos/advancement/recipes/tools/contract.json
+9f0bcf938550af652bd3c4737d09aac9014337ea data/moblassos/advancement/recipes/tools/diamond_lasso.json
+297f099666c619d2317b5290270c38734793555a data/moblassos/advancement/recipes/tools/emerald_lasso.json
+85b516dbc3c442676bab7778716b879993c34ca6 data/moblassos/advancement/recipes/tools/golden_lasso.json
+25101d2aaae1620d0009df44fcee51837ad8acd8 data/moblassos/advancement/recipes/tools/hostile_lasso.json
+2e7d431b0c809d455b6a80371204e70fe8730c9c data/moblassos/recipe/aqua_lasso.json
+ce0ee13f36ac83dc034f6d4bce095d7247e0edb6 data/moblassos/recipe/contract.json
+24aa611c756d9c1820e5766b58b8526f7391648a data/moblassos/recipe/diamond_lasso.json
+0f0de74ed5a456adc7e08e7a84d4d5cf1aebb217 data/moblassos/recipe/emerald_lasso.json
+07fb1efb93bffcb6ed128c63155ee8c23e3634a8 data/moblassos/recipe/golden_lasso.json
+48f8945bd122e4f6a366e2a5368b5896ce3898b7 data/moblassos/recipe/hostile_lasso.json

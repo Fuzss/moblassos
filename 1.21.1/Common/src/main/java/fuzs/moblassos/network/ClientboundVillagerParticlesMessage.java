@@ -34,15 +34,9 @@ public record ClientboundVillagerParticlesMessage(int entityId,
                     double d0 = livingEntity.getRandom().nextGaussian() * 0.02D;
                     double d1 = livingEntity.getRandom().nextGaussian() * 0.02D;
                     double d2 = livingEntity.getRandom().nextGaussian() * 0.02D;
-                    livingEntity.level()
-                            .addParticle(particleOption,
-                                    livingEntity.getRandomX(1.0D),
-                                    livingEntity.getRandomY() + 1.0D,
-                                    livingEntity.getRandomZ(1.0D),
-                                    d0,
-                                    d1,
-                                    d2
-                            );
+                    livingEntity.level().addParticle(particleOption, livingEntity.getRandomX(1.0D),
+                            livingEntity.getRandomY() + 1.0D, livingEntity.getRandomZ(1.0D), d0, d1, d2
+                    );
                 }
             }
         };

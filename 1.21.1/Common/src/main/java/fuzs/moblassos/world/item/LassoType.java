@@ -25,33 +25,31 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 
 public enum LassoType implements StringRepresentable {
-    GOLDEN("golden",
-            entity -> entity instanceof Animal || entity instanceof AmbientCreature,
+    GOLDEN("golden", entity -> entity instanceof Animal || entity instanceof AmbientCreature,
             () -> MobLassos.CONFIG.get(ServerConfig.class).goldenLassoTime
-    ), AQUA("aqua",
-            entity -> entity instanceof WaterAnimal,
-            () -> MobLassos.CONFIG.get(ServerConfig.class).aquaLassoTime
-    ), DIAMOND("diamond",
+    ),
+    AQUA("aqua", entity -> entity instanceof WaterAnimal, () -> MobLassos.CONFIG.get(ServerConfig.class).aquaLassoTime),
+    DIAMOND("diamond",
             entity -> entity instanceof Animal || entity instanceof AmbientCreature || entity instanceof WaterAnimal,
             () -> MobLassos.CONFIG.get(ServerConfig.class).diamondLassoTime
-    ), EMERALD("emerald",
-            entity -> entity instanceof AbstractVillager,
+    ),
+    EMERALD("emerald", entity -> entity instanceof AbstractVillager,
             () -> MobLassos.CONFIG.get(ServerConfig.class).emeraldLassoTime
     ) {
         @Override
         protected Either<MutableComponent, Unit> isValidMob(Mob mob) {
             Either<MutableComponent, Unit> result = super.isValidMob(mob);
-            if (result.left().isEmpty()) {
-                if (!ModRegistry.VILLAGER_CONTRACT_CAPABILITY.get((AbstractVillager) mob).hasAcceptedContract()) {
-                    return Either.left(Component.translatable(this.getFailureTranslationKey(), mob.getDisplayName()));
-                }
+            if (!MobLassos.CONFIG.get(ServerConfig.class).villagersRequireContract) {
+                return result;
+            } else if (result.left().isEmpty() && !ModRegistry.VILLAGER_CONTRACT_ATTACHMENT_TYPE.has(mob)) {
+                return Either.left(Component.translatable(this.getFailureTranslationKey(), mob.getDisplayName()));
+            } else {
+                return result;
             }
-            return result;
         }
-    }, HOSTILE("hostile",
-            entity -> entity instanceof Enemy,
-            () -> MobLassos.CONFIG.get(ServerConfig.class).hostileLassoTime,
-            true
+    },
+    HOSTILE("hostile", entity -> entity instanceof Enemy,
+            () -> MobLassos.CONFIG.get(ServerConfig.class).hostileLassoTime, true
     ) {
         @Override
         protected Either<MutableComponent, Unit> isValidMob(Mob mob) {
@@ -60,8 +58,7 @@ public enum LassoType implements StringRepresentable {
                 double hostileMobHealth = MobLassos.CONFIG.get(ServerConfig.class).hostileMobHealth;
                 if (mob.getHealth() / mob.getMaxHealth() >= hostileMobHealth) {
                     MutableComponent component = Component.translatable(this.getFailureTranslationKey(),
-                            mob.getDisplayName(),
-                            String.format("%.0f", hostileMobHealth * mob.getMaxHealth()),
+                            mob.getDisplayName(), String.format("%.0f", hostileMobHealth * mob.getMaxHealth()),
                             String.format("%.0f", mob.getHealth())
                     );
                     return Either.left(component);
@@ -69,7 +66,8 @@ public enum LassoType implements StringRepresentable {
             }
             return result;
         }
-    }, CREATIVE("creative", entity -> true, () -> MobLassos.CONFIG.get(ServerConfig.class).creativeLassoTime, true);
+    },
+    CREATIVE("creative", entity -> true, () -> MobLassos.CONFIG.get(ServerConfig.class).creativeLassoTime, true);
 
     private final String name;
     private final Predicate<Mob> filter;

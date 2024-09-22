@@ -5,6 +5,7 @@ import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.client.MobLassosClient;
 import fuzs.moblassos.init.ModRegistry;
 import fuzs.puzzleslib.api.client.data.v2.AbstractModelProvider;
+import fuzs.puzzleslib.api.client.data.v2.ItemModelProperties;
 import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
 import net.minecraft.data.models.ItemModelGenerators;
 import net.minecraft.data.models.model.ModelLocationUtils;
@@ -40,12 +41,11 @@ public class ModModelProvider extends AbstractModelProvider {
     }
 
     public static ResourceLocation createLassoItem(Item item, BiConsumer<ResourceLocation, Supplier<JsonElement>> modelOutput) {
-        return generateFlatItem(item,
-                ModelTemplates.FLAT_ITEM,
-                modelOutput,
-                ItemOverride.of(ModelLocationUtils.getModelLocation(item, "_filled"),
-                        MobLassosClient.ITEM_PROPERTY_FILLED,
-                        1.0F
+        return generateFlatItem(item, ModelTemplates.FLAT_ITEM, modelOutput,
+                ItemModelProperties.overridesFactory(ModelTemplates.FLAT_ITEM,
+                        ItemModelProperties.singleOverride(ModelLocationUtils.getModelLocation(item, "_filled"),
+                                MobLassosClient.ITEM_PROPERTY_FILLED, 1.0F
+                        )
                 )
         );
     }
@@ -55,8 +55,7 @@ public class ModModelProvider extends AbstractModelProvider {
                 TextureMapping.layered(ModelLocationUtils.getModelLocation(item),
                         decorateItemModelLocation(MobLassos.id("lasso_overlay_light")),
                         decorateItemModelLocation(MobLassos.id("lasso_overlay_dark"))
-                ),
-                modelOutput
+                ), modelOutput
         );
     }
 }
