@@ -5,6 +5,7 @@ import fuzs.moblassos.init.ModRegistry;
 import fuzs.moblassos.network.ClientboundVillagerParticlesMessage;
 import fuzs.puzzleslib.api.core.v1.Proxy;
 import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
+import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
@@ -78,7 +79,7 @@ public class ContractItem extends Item {
             return EventResultHolder.pass();
         }
 
-        return EventResultHolder.interrupt(InteractionResult.sidedSuccess(level.isClientSide));
+        return EventResultHolder.interrupt(InteractionResultHelper.sidedSuccess(level.isClientSide));
     }
 
     private static void onUseContract(Level level, Player player, AbstractVillager abstractVillager, ItemStack itemInHand, boolean happyParticles) {
@@ -87,14 +88,13 @@ public class ContractItem extends Item {
             // just an empty stack for no sound to play
             abstractVillager.notifyTradeUpdated(itemInHand);
             MobLassos.NETWORK.sendToAllTracking(abstractVillager,
-                    new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles), false
-            );
+                    new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles),
+                    false);
         }
         Component displayName = getVillagerDisplayName(abstractVillager);
         player.displayClientMessage(Component.translatable(
                 ModRegistry.CONTRACT_ITEM.value().getDescriptionId() + "." + (happyParticles ? "accept" : "reject"),
-                displayName
-        ).withStyle(happyParticles ? ChatFormatting.GREEN : ChatFormatting.RED), true);
+                displayName).withStyle(happyParticles ? ChatFormatting.GREEN : ChatFormatting.RED), true);
     }
 
     private static Component getVillagerDisplayName(AbstractVillager abstractVillager) {

@@ -2,22 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "equipment",
   "key": {
-    "#": {
-      "item": "minecraft:iron_nugget"
-    },
-    "&": {
-      "item": "moblassos:golden_lasso"
-    },
-    "+": {
-      "item": "minecraft:blaze_rod"
-    },
+    "#": "minecraft:iron_nugget",
+    "&": "moblassos:golden_lasso",
+    "+": "minecraft:blaze_rod",
     "X": [
-      {
-        "item": "minecraft:leather"
-      },
-      {
-        "item": "minecraft:rabbit_hide"
-      }
+      "minecraft:leather",
+      "minecraft:rabbit_hide"
     ]
   },
   "pattern": [

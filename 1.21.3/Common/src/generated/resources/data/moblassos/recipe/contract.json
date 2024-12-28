@@ -2,18 +2,10 @@
   "type": "minecraft:crafting_shapeless",
   "category": "equipment",
   "ingredients": [
-    {
-      "item": "minecraft:glass_bottle"
-    },
-    {
-      "item": "minecraft:feather"
-    },
-    {
-      "item": "minecraft:ink_sac"
-    },
-    {
-      "item": "minecraft:paper"
-    }
+    "minecraft:glass_bottle",
+    "minecraft:feather",
+    "minecraft:ink_sac",
+    "minecraft:paper"
   ],
   "result": {
     "count": 1,

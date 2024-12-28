@@ -6,9 +6,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 
-public class LassoFabricItem extends LassoItem {
+public class FabricLassoItem extends LassoItem {
 
-    public LassoFabricItem(Properties properties, LassoType type) {
+    public FabricLassoItem(Properties properties, LassoType type) {
         super(properties, type);
     }
 

@@ -14,7 +14,7 @@ import net.neoforged.fml.common.Mod;
 public class MobLassosNeoForge {
 
     public MobLassosNeoForge() {
-        NeoForgeModRegistry.touch();
+        NeoForgeModRegistry.bootstrap();
         ModConstructor.construct(MobLassos.MOD_ID, MobLassos::new);
         DataProviderHelper.registerDataProviders(MobLassos.MOD_ID, ModEnchantmentRegistryProvider::new,
                 ModEntityTypeTagProvider::new, ModItemTagProvider::new, ModRecipeProvider::new

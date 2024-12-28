@@ -9,7 +9,7 @@ public class MobLassosFabric implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        FabricModRegistry.touch();
+        FabricModRegistry.bootstrap();
         ModConstructor.construct(MobLassos.MOD_ID, MobLassos::new);
     }
 }

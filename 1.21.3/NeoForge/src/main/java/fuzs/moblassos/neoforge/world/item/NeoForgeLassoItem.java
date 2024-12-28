@@ -4,9 +4,9 @@ import fuzs.moblassos.world.item.LassoItem;
 import fuzs.moblassos.world.item.LassoType;
 import net.minecraft.world.item.ItemStack;
 
-public class LassoNeoForgeItem extends LassoItem {
+public class NeoForgeLassoItem extends LassoItem {
 
-    public LassoNeoForgeItem(Properties properties, LassoType type) {
+    public NeoForgeLassoItem(Properties properties, LassoType type) {
         super(properties, type);
     }
 
