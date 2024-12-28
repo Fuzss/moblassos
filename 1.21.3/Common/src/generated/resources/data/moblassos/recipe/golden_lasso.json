@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "minecraft:string"
+    },
+    "&": {
+      "item": "minecraft:ender_pearl"
+    },
+    "X": {
+      "item": "minecraft:gold_nugget"
+    }
+  },
+  "pattern": [
+    "X#X",
+    "#&#",
+    "X#X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "moblassos:golden_lasso"
+  }
+}
