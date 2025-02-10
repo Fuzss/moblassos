@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:emerald",
+    "&": "moblassos:golden_lasso"
+  },
+  "pattern": [
+    " # ",
+    "#&#",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "moblassos:emerald_lasso"
+  }
+}
