@@ -16,7 +16,7 @@ public class ModEntityTypeTagProvider extends AbstractTagProvider<EntityType<?>>
     @Override
     public void addTags(HolderLookup.Provider provider) {
         for (LassoType lassoType : LassoType.values()) {
-            this.add(lassoType.getEntityTypeTagKey()).addOptionalTag("c:capturing_not_supported");
+            this.tag(lassoType.getEntityTypeTagKey()).addOptionalTag("c:capturing_not_supported");
         }
     }
 }

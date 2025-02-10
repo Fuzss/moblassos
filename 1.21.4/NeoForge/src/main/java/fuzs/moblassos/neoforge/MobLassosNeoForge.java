@@ -1,7 +1,7 @@
 package fuzs.moblassos.neoforge;
 
 import fuzs.moblassos.MobLassos;
-import fuzs.moblassos.data.ModEnchantmentRegistryProvider;
+import fuzs.moblassos.data.ModDatapackRegistriesProvider;
 import fuzs.moblassos.data.ModRecipeProvider;
 import fuzs.moblassos.data.tags.ModEntityTypeTagProvider;
 import fuzs.moblassos.data.tags.ModItemTagProvider;
@@ -16,7 +16,7 @@ public class MobLassosNeoForge {
     public MobLassosNeoForge() {
         NeoForgeModRegistry.bootstrap();
         ModConstructor.construct(MobLassos.MOD_ID, MobLassos::new);
-        DataProviderHelper.registerDataProviders(MobLassos.MOD_ID, ModEnchantmentRegistryProvider::new,
+        DataProviderHelper.registerDataProviders(MobLassos.MOD_ID, ModDatapackRegistriesProvider::new,
                 ModEntityTypeTagProvider::new, ModItemTagProvider::new, ModRecipeProvider::new
         );
     }

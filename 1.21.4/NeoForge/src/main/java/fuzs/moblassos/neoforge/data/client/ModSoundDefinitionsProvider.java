@@ -1,18 +1,18 @@
 package fuzs.moblassos.neoforge.data.client;
 
 import fuzs.moblassos.init.ModRegistry;
-import fuzs.puzzleslib.neoforge.api.data.v2.client.AbstractSoundDefinitionProvider;
-import fuzs.puzzleslib.neoforge.api.data.v2.core.NeoForgeDataProviderContext;
+import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.neoforge.api.client.data.v2.AbstractSoundProvider;
 import net.minecraft.sounds.SoundEvents;
 
-public class ModSoundDefinitionsProvider extends AbstractSoundDefinitionProvider {
+public class ModSoundDefinitionsProvider extends AbstractSoundProvider {
 
-    public ModSoundDefinitionsProvider(NeoForgeDataProviderContext context) {
+    public ModSoundDefinitionsProvider(DataProviderContext context) {
         super(context);
     }
 
     @Override
-    public void addSoundDefinitions() {
+    public void addSounds() {
         this.add(ModRegistry.LASSO_PICK_UP_SOUND_EVENT.value(), sound(SoundEvents.BEEHIVE_ENTER));
         this.add(ModRegistry.LASSO_RELEASE_SOUND_EVENT.value(), sound(SoundEvents.BEEHIVE_EXIT));
     }

@@ -28,7 +28,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.context.UseOnContext;
@@ -97,13 +96,6 @@ public class LassoItem extends Item {
         }
 
         return EventResultHolder.pass();
-    }
-
-    public int getColor(ItemStack itemStack, int tintIndex) {
-        if (tintIndex == 0) return -1;
-        SpawnEggItem spawnEggItem = SpawnEggItem.byId(this.getStoredEntityType(itemStack));
-        if (spawnEggItem == null) return -1;
-        return spawnEggItem.getColor(tintIndex - 1);
     }
 
     public boolean hasStoredEntity(ItemStack itemStack) {

@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 
@@ -44,6 +45,8 @@ public class ModRegistry {
     public static final Holder.Reference<Item> CONTRACT_ITEM = REGISTRIES.registerItem("contract",
             ContractItem::new,
             () -> new Item.Properties().stacksTo(1));
+    public static final Holder.Reference<CreativeModeTab> CREATIVE_MODE_TAB = REGISTRIES.registerCreativeModeTab(
+            GOLDEN_LASSO_ITEM);
     public static final ResourceKey<Enchantment> HOLDING_ENCHANTMENT = REGISTRIES.registerEnchantment("holding");
     public static final Holder.Reference<SoundEvent> LASSO_PICK_UP_SOUND_EVENT = REGISTRIES.registerSoundEvent(
             "item.lasso.pick_up");
