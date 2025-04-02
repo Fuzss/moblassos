@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:diamond",
+    "&": "moblassos:golden_lasso",
+    "X": "moblassos:aqua_lasso"
+  },
+  "pattern": [
+    " # ",
+    "X#&",
+    " # "
+  ],
+  "result": {
+    "count": 1,
+    "id": "moblassos:diamond_lasso"
+  }
+}
