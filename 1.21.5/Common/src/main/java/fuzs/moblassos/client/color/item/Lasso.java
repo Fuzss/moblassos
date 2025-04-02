@@ -3,24 +3,27 @@ package fuzs.moblassos.client.color.item;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fuzs.moblassos.world.item.LassoItem;
-import net.minecraft.client.Minecraft;
+import net.minecraft.Util;
 import net.minecraft.client.color.item.ItemTintSource;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.renderer.item.ItemStackRenderState;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.ExtraCodecs;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.SpawnEggItem;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.SplittableRandom;
+import java.util.function.Function;
 
 public final class Lasso implements ItemTintSource {
     public static final MapCodec<Lasso> MAP_CODEC = RecordCodecBuilder.mapCodec(instance -> instance.group(ExtraCodecs.NON_NEGATIVE_INT.fieldOf(
             "tint_layer").forGetter((Lasso lasso) -> lasso.tintLayer)).apply(instance, Lasso::new));
+    static final Function<Long, Float> ENTITY_TYPE_HUES = Util.memoize((Long seed) -> {
+        // prevent clustering when providing sequential seeds in a small range
+        return new SplittableRandom(seed).nextFloat();
+    });
 
-    private final ItemStackRenderState itemStackRenderState = new ItemStackRenderState();
     private final int tintLayer;
 
     public Lasso(int tintLayer) {
@@ -30,31 +33,18 @@ public final class Lasso implements ItemTintSource {
     @Override
     public int calculate(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity) {
         if (itemStack.getItem() instanceof LassoItem item) {
-            EntityType<?> entityType = item.getStoredEntityType(itemStack);
-            return this.getSpawnEggTintLayer(entityType, clientLevel, livingEntity);
+            long seed = BuiltInRegistries.ENTITY_TYPE.getId(item.getStoredEntityType(itemStack));
+            float hue = ENTITY_TYPE_HUES.apply(seed);
+            if (this.tintLayer == 0) {
+                // highlightColor
+                return Mth.hsvToArgb(hue, 0.9F, 0.9F, 255);
+            } else {
+                // backgroundColor
+                return Mth.hsvToArgb(1.0F - hue, 0.8F, 0.9F, 255);
+            }
         } else {
             return -1;
         }
-    }
-
-    private int getSpawnEggTintLayer(@Nullable EntityType<?> entityType, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity) {
-        Item item = SpawnEggItem.byId(entityType);
-        ItemStack itemStack = item != null ? new ItemStack(item) : ItemStack.EMPTY;
-        int[] tintLayers = this.getItemTintLayers(itemStack, clientLevel, livingEntity);
-        return this.tintLayer >= 0 && this.tintLayer < tintLayers.length ? tintLayers[this.tintLayer] : -1;
-    }
-
-    private int[] getItemTintLayers(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity) {
-        Minecraft.getInstance()
-                .getItemModelResolver()
-                .updateForTopItem(this.itemStackRenderState,
-                        itemStack,
-                        ItemDisplayContext.NONE,
-                        false,
-                        clientLevel,
-                        livingEntity,
-                        0);
-        return this.itemStackRenderState.firstLayer().tintLayers;
     }
 
     @Override

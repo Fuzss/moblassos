@@ -1,10 +1,10 @@
 package fuzs.moblassos.world.item;
 
-import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.init.ModRegistry;
 import fuzs.moblassos.network.ClientboundVillagerParticlesMessage;
-import fuzs.puzzleslib.api.core.v1.Proxy;
 import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
+import fuzs.puzzleslib.api.network.v4.MessageSender;
+import fuzs.puzzleslib.api.network.v4.PlayerSet;
 import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -19,20 +19,12 @@ import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
-
-import java.util.List;
 
 public class ContractItem extends Item {
 
     public ContractItem(Properties properties) {
         super(properties);
-    }
-
-    @Override
-    public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag tooltipFlag) {
-        tooltipComponents.addAll(Proxy.INSTANCE.splitTooltipLines(this.getDescriptionComponent()));
     }
 
     public Component getDescriptionComponent() {
@@ -87,9 +79,8 @@ public class ContractItem extends Item {
             // must just not be empty for yes sound to play, so any stack is ok basically
             // just an empty stack for no sound to play
             abstractVillager.notifyTradeUpdated(itemInHand);
-            MobLassos.NETWORK.sendToAllTracking(abstractVillager,
-                    new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles),
-                    false);
+            MessageSender.broadcast(PlayerSet.nearEntity(abstractVillager),
+                    new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles));
         }
         Component displayName = getVillagerDisplayName(abstractVillager);
         player.displayClientMessage(Component.translatable(
@@ -100,7 +91,7 @@ public class ContractItem extends Item {
     private static Component getVillagerDisplayName(AbstractVillager abstractVillager) {
         if (abstractVillager instanceof Villager villager) {
             // include villager level as a hint that it's relevant for accepting a contract
-            Component merchantLevel = Component.translatable("merchant.level." + villager.getVillagerData().getLevel());
+            Component merchantLevel = Component.translatable("merchant.level." + villager.getVillagerData().level());
             return Component.empty()
                     .append(abstractVillager.getDisplayName())
                     .append(" (")
@@ -114,7 +105,7 @@ public class ContractItem extends Item {
     public static boolean canAcceptContract(AbstractVillager abstractVillager) {
         if (abstractVillager instanceof Villager villager) {
             return Math.abs(villager.getUUID().getLeastSignificantBits() % VillagerData.MAX_VILLAGER_LEVEL) <
-                    villager.getVillagerData().getLevel();
+                    villager.getVillagerData().level();
         } else {
             return true;
         }

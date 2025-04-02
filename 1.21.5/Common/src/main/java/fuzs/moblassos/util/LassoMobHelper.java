@@ -1,7 +1,9 @@
 package fuzs.moblassos.util;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.UUIDUtil;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -22,8 +24,7 @@ public class LassoMobHelper {
             "neoforge:spawn_type",
             "SleepingX",
             "SleepingY",
-            "SleepingZ"
-    );
+            "SleepingZ");
 
     public static CompoundTag saveEntity(Entity entity) {
         CompoundTag compoundTag = new CompoundTag();
@@ -41,12 +42,11 @@ public class LassoMobHelper {
             offsetY = 0.0D;
         }
 
-        entity.moveTo((double) pos.getX() + 0.5D,
+        entity.snapTo((double) pos.getX() + 0.5D,
                 (double) pos.getY() + offsetY,
                 (double) pos.getZ() + 0.5D,
                 Mth.wrapDegrees(level.random.nextFloat() * 360.0F),
-                0.0F
-        );
+                0.0F);
         if (entity instanceof Mob mob) {
             mob.yHeadRot = mob.getYRot();
             mob.yBodyRot = mob.getYRot();
@@ -62,7 +62,7 @@ public class LassoMobHelper {
 
     public static void removeTagKeys(ServerLevel level, CompoundTag compoundTag) {
         TAGS_TO_REMOVE.forEach(compoundTag::remove);
-        if (level.getEntity(compoundTag.getUUID(Entity.UUID_TAG)) != null) {
+        if (level.getEntity(compoundTag.read(Entity.UUID_TAG, UUIDUtil.CODEC).orElse(Util.NIL_UUID)) != null) {
             // causes an issue with duplicate uuids when the lasso stack is copied in creative mode,
             // but we should not always remove the uuid as we rely on it for the villager contract
             compoundTag.remove(Entity.UUID_TAG);

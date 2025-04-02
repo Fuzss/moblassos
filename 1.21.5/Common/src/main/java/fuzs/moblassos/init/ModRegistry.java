@@ -7,7 +7,7 @@ import fuzs.puzzleslib.api.attachment.v4.DataAttachmentRegistry;
 import fuzs.puzzleslib.api.attachment.v4.DataAttachmentType;
 import fuzs.puzzleslib.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.api.init.v3.tags.TagFactory;
-import fuzs.puzzleslib.api.network.v3.PlayerSet;
+import fuzs.puzzleslib.api.network.v4.PlayerSet;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
@@ -18,6 +18,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -61,6 +62,7 @@ public class ModRegistry {
     static final TagFactory TAGS = TagFactory.make(MobLassos.MOD_ID);
     public static final TagKey<Item> LASSOS_ITEM_TAG = TAGS.registerItemTag("lassos");
     public static final TagKey<Item> LASSO_ENCHANTABLE_ITEM_TAG = TAGS.registerItemTag("enchantable/lasso");
+    public static final TagKey<EntityType<?>> BOSSES_ENTITY_TYPE_TAG = TagFactory.COMMON.registerEntityTypeTag("bosses");
 
     public static void bootstrap() {
         // NO-OP

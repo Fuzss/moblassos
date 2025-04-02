@@ -5,6 +5,7 @@ import fuzs.moblassos.client.color.item.Lasso;
 import fuzs.moblassos.client.renderer.item.properties.conditional.LassoFilled;
 import fuzs.moblassos.init.ModRegistry;
 import fuzs.puzzleslib.api.client.data.v2.AbstractModelProvider;
+import fuzs.puzzleslib.api.client.data.v2.models.ModelLocationHelper;
 import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;

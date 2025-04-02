@@ -5,7 +5,6 @@ import com.mojang.datafixers.util.Unit;
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.config.ServerConfig;
 import fuzs.moblassos.init.ModRegistry;
-import fuzs.puzzleslib.api.core.v1.CommonAbstractions;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -14,6 +13,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.OwnableEntity;
 import net.minecraft.world.entity.ambient.AmbientCreature;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.WaterAnimal;
@@ -25,20 +25,19 @@ import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 
 public enum LassoType implements StringRepresentable {
-    GOLDEN("golden", entity -> entity instanceof Animal || entity instanceof AmbientCreature,
-            () -> MobLassos.CONFIG.get(ServerConfig.class).goldenLassoTime
-    ),
-    AQUA("aqua", entity -> entity instanceof WaterAnimal, () -> MobLassos.CONFIG.get(ServerConfig.class).aquaLassoTime),
+    GOLDEN("golden",
+            (Mob mob) -> mob instanceof Animal || mob instanceof AmbientCreature,
+            () -> MobLassos.CONFIG.get(ServerConfig.class).goldenLassoTime),
+    AQUA("aqua", (Mob mob) -> mob instanceof WaterAnimal, () -> MobLassos.CONFIG.get(ServerConfig.class).aquaLassoTime),
     DIAMOND("diamond",
-            entity -> entity instanceof Animal || entity instanceof AmbientCreature || entity instanceof WaterAnimal,
-            () -> MobLassos.CONFIG.get(ServerConfig.class).diamondLassoTime
-    ),
-    EMERALD("emerald", entity -> entity instanceof AbstractVillager,
-            () -> MobLassos.CONFIG.get(ServerConfig.class).emeraldLassoTime
-    ) {
+            (Mob mob) -> mob instanceof Animal || mob instanceof AmbientCreature || mob instanceof WaterAnimal,
+            () -> MobLassos.CONFIG.get(ServerConfig.class).diamondLassoTime),
+    EMERALD("emerald",
+            (Mob mob) -> mob instanceof AbstractVillager,
+            () -> MobLassos.CONFIG.get(ServerConfig.class).emeraldLassoTime) {
         @Override
-        protected Either<MutableComponent, Unit> isValidMob(Mob mob) {
-            Either<MutableComponent, Unit> result = super.isValidMob(mob);
+        protected Either<MutableComponent, Unit> isValidMob(Player player, Mob mob) {
+            Either<MutableComponent, Unit> result = super.isValidMob(player, mob);
             if (!MobLassos.CONFIG.get(ServerConfig.class).villagersRequireContract) {
                 return result;
             } else if (result.left().isEmpty() && !ModRegistry.VILLAGER_CONTRACT_ATTACHMENT_TYPE.has(mob)) {
@@ -48,26 +47,27 @@ public enum LassoType implements StringRepresentable {
             }
         }
     },
-    HOSTILE("hostile", entity -> entity instanceof Enemy,
-            () -> MobLassos.CONFIG.get(ServerConfig.class).hostileLassoTime, true
-    ) {
+    HOSTILE("hostile",
+            (Mob mob) -> mob instanceof Enemy,
+            () -> MobLassos.CONFIG.get(ServerConfig.class).hostileLassoTime,
+            true) {
         @Override
-        protected Either<MutableComponent, Unit> isValidMob(Mob mob) {
-            Either<MutableComponent, Unit> result = super.isValidMob(mob);
+        protected Either<MutableComponent, Unit> isValidMob(Player player, Mob mob) {
+            Either<MutableComponent, Unit> result = super.isValidMob(player, mob);
             if (result.left().isEmpty()) {
                 double hostileMobHealth = MobLassos.CONFIG.get(ServerConfig.class).hostileMobHealth;
                 if (mob.getHealth() / mob.getMaxHealth() >= hostileMobHealth) {
                     MutableComponent component = Component.translatable(this.getFailureTranslationKey(),
-                            mob.getDisplayName(), String.format("%.0f", hostileMobHealth * mob.getMaxHealth()),
-                            String.format("%.0f", mob.getHealth())
-                    );
+                            mob.getDisplayName(),
+                            String.format("%.0f", hostileMobHealth * mob.getMaxHealth()),
+                            String.format("%.0f", mob.getHealth()));
                     return Either.left(component);
                 }
             }
             return result;
         }
     },
-    CREATIVE("creative", entity -> true, () -> MobLassos.CONFIG.get(ServerConfig.class).creativeLassoTime, true);
+    CREATIVE("creative", (Mob mob) -> true, () -> MobLassos.CONFIG.get(ServerConfig.class).creativeLassoTime, true);
 
     private final String name;
     private final Predicate<Mob> filter;
@@ -103,17 +103,21 @@ public enum LassoType implements StringRepresentable {
     }
 
     public boolean canPlayerPickUp(Player player, Mob mob) {
-        return this.isValidMob(mob).ifLeft(component -> {
+        return this.isValidMob(player, mob).ifLeft((MutableComponent component) -> {
             player.displayClientMessage(component.withStyle(ChatFormatting.RED), true);
         }).right().isPresent();
     }
 
-    protected Either<MutableComponent, Unit> isValidMob(Mob mob) {
-        if (!CommonAbstractions.INSTANCE.isBossMob(mob.getType())) {
-            if (!mob.getType().is(this.getEntityTypeTagKey()) && this.filter.test(mob)) {
-                return Either.right(Unit.INSTANCE);
+    protected Either<MutableComponent, Unit> isValidMob(Player player, Mob mob) {
+        if (!mob.getType().is(ModRegistry.BOSSES_ENTITY_TYPE_TAG)) {
+            if (!(mob instanceof OwnableEntity ownableEntity) || ownableEntity.getOwner() == null ||
+                    ownableEntity.getOwner() == player) {
+                if (!mob.getType().is(this.getEntityTypeTagKey()) && this.filter.test(mob)) {
+                    return Either.right(Unit.INSTANCE);
+                }
             }
         }
+
         return Either.left(Component.translatable(GOLDEN.getFailureTranslationKey(), mob.getDisplayName()));
     }
 

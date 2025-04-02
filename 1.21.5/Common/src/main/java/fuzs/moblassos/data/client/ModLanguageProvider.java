@@ -15,7 +15,7 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
 
     @Override
     public void addTranslations(TranslationBuilder builder) {
-        builder.addCreativeModeTab(MobLassos.MOD_ID, MobLassos.MOD_NAME);
+        builder.add(ModRegistry.CREATIVE_MODE_TAB.value(), MobLassos.MOD_NAME);
         builder.add(ModRegistry.GOLDEN_LASSO_ITEM.value(), "Golden Lasso");
         builder.add(ModRegistry.GOLDEN_LASSO_ITEM.value(), "desc", "Holds: Animals");
         builder.add(ModRegistry.AQUA_LASSO_ITEM.value(), "Aqua Lasso");
@@ -29,13 +29,13 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
         builder.add(ModRegistry.CREATIVE_LASSO_ITEM.value(), "Creative Lasso");
         builder.add(ModRegistry.CREATIVE_LASSO_ITEM.value(), "desc", "Holds: Any");
         builder.add(ModRegistry.CONTRACT_ITEM.value(), "Contract");
-        builder.add(ModRegistry.CONTRACT_ITEM.value(), "desc",
-                "Allows picking-up villagers in an emerald lasso. Leveling up increases the chance to accept."
-        );
+        builder.add(ModRegistry.CONTRACT_ITEM.value(),
+                "desc",
+                "Allows picking-up villagers in an emerald lasso. Leveling up increases the chance to accept.");
         builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT, "Holding");
-        builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT, "desc",
-                "Increases the time a lasso is able to hold a mob."
-        );
+        builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT,
+                "desc",
+                "Increases the time a lasso is able to hold a mob.");
         builder.add(LassoType.GOLDEN.getFailureTranslationKey(), "%s cannot be captured");
         builder.add(LassoType.EMERALD.getFailureTranslationKey(), "%s must accept a contract first");
         builder.add(LassoType.HOSTILE.getFailureTranslationKey(), "%s must be below %s health (currently %s)");
