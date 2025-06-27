@@ -59,7 +59,7 @@ public class ModRegistry {
             .networkSynchronized(StreamCodec.unit(Unit.INSTANCE), PlayerSet::nearEntity)
             .build(MobLassos.id("villager_contract"));
 
-    static final TagFactory TAGS = TagFactory.make(MobLassos.MOD_ID);
+    public static final TagFactory TAGS = TagFactory.make(MobLassos.MOD_ID);
     public static final TagKey<Item> LASSOS_ITEM_TAG = TAGS.registerItemTag("lassos");
     public static final TagKey<Item> LASSO_ENCHANTABLE_ITEM_TAG = TAGS.registerItemTag("enchantable/lasso");
     public static final TagKey<EntityType<?>> BOSSES_ENTITY_TYPE_TAG = TagFactory.COMMON.registerEntityTypeTag("bosses");

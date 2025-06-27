@@ -1,5 +1,6 @@
 package fuzs.moblassos.util;
 
+import fuzs.puzzleslib.api.util.v1.ValueSerializationHelper;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -8,10 +9,10 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.storage.ValueOutput;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -27,10 +28,12 @@ public class LassoMobHelper {
             "SleepingZ");
 
     public static CompoundTag saveEntity(Entity entity) {
-        CompoundTag compoundTag = new CompoundTag();
-        compoundTag.putString("id", EntityType.getKey(entity.getType()).toString());
-        entity.saveWithoutId(compoundTag);
-        return compoundTag;
+        return ValueSerializationHelper.save(entity.problemPath(),
+                entity.registryAccess(),
+                (ValueOutput valueOutput) -> {
+                    entity.saveWithoutId(valueOutput);
+                    valueOutput.putString("id", entity.getEncodeId());
+                });
     }
 
     public static void moveEntityTo(Entity entity, Level level, BlockPos pos, boolean shouldOffsetY) {
@@ -60,12 +63,12 @@ public class LassoMobHelper {
         return 1.0D + Shapes.collide(Direction.Axis.Y, box, iterable, -1.0D);
     }
 
-    public static void removeTagKeys(ServerLevel level, CompoundTag compoundTag) {
+    public static void removeTagKeys(ServerLevel serverLevel, CompoundTag compoundTag) {
         TAGS_TO_REMOVE.forEach(compoundTag::remove);
-        if (level.getEntity(compoundTag.read(Entity.UUID_TAG, UUIDUtil.CODEC).orElse(Util.NIL_UUID)) != null) {
+        if (serverLevel.getEntity(compoundTag.read(Entity.TAG_UUID, UUIDUtil.CODEC).orElse(Util.NIL_UUID)) != null) {
             // causes an issue with duplicate uuids when the lasso stack is copied in creative mode,
             // but we should not always remove the uuid as we rely on it for the villager contract
-            compoundTag.remove(Entity.UUID_TAG);
+            compoundTag.remove(Entity.TAG_UUID);
         }
     }
 }

@@ -6,7 +6,6 @@ import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.config.ServerConfig;
 import fuzs.moblassos.init.ModRegistry;
 import net.minecraft.ChatFormatting;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.tags.TagKey;
@@ -99,7 +98,7 @@ public enum LassoType implements StringRepresentable {
     }
 
     public TagKey<EntityType<?>> getEntityTypeTagKey() {
-        return TagKey.create(Registries.ENTITY_TYPE, MobLassos.id("forbidden_in_" + this.name + "_lasso"));
+        return ModRegistry.TAGS.registerEntityTypeTag("forbidden_in_" + this.name + "_lasso");
     }
 
     public boolean canPlayerPickUp(Player player, Mob mob) {
@@ -110,8 +109,8 @@ public enum LassoType implements StringRepresentable {
 
     protected Either<MutableComponent, Unit> isValidMob(Player player, Mob mob) {
         if (!mob.getType().is(ModRegistry.BOSSES_ENTITY_TYPE_TAG)) {
-            if (!(mob instanceof OwnableEntity ownableEntity) || ownableEntity.getOwner() == null ||
-                    ownableEntity.getOwner() == player) {
+            if (!(mob instanceof OwnableEntity ownableEntity) || ownableEntity.getOwner() == null
+                    || ownableEntity.getOwner() == player) {
                 if (!mob.getType().is(this.getEntityTypeTagKey()) && this.filter.test(mob)) {
                     return Either.right(Unit.INSTANCE);
                 }

@@ -11,12 +11,13 @@ import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.api.client.core.v1.context.ItemModelsContext;
 import fuzs.puzzleslib.api.client.gui.v2.tooltip.ItemTooltipRegistry;
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -24,9 +25,10 @@ public class MobLassosClient implements ClientModConstructor {
 
     @Override
     public void onClientSetup() {
-        ItemTooltipRegistry.registerItemTooltip(ContractItem.class, ContractItem::getDescriptionComponent);
-        ItemTooltipRegistry.registerItemTooltip(LassoItem.class,
-                (LassoItem item, ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipFlag tooltipFlag, Consumer<Component> tooltipLineConsumer) -> {
+        ItemTooltipRegistry.ITEM.registerItemTooltip(ContractItem.class, ContractItem::getDescriptionComponent);
+        ItemTooltipRegistry.ITEM.registerItemTooltip(LassoItem.class,
+                (ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipFlag tooltipFlag, @Nullable Player player, Consumer<Component> tooltipLineConsumer) -> {
+                    LassoItem item = (LassoItem) itemStack.getItem();
                     if (item.hasStoredEntity(itemStack)) {
                         MutableComponent component = Component.translatable("gui.entity_tooltip.type",
                                 item.getStoredEntityType(itemStack).getDescription());
@@ -35,21 +37,22 @@ public class MobLassosClient implements ClientModConstructor {
                         tooltipLineConsumer.accept(Component.translatable(item.getDescriptionId() + ".desc")
                                 .withStyle(ChatFormatting.GOLD));
                     }
-                    if (tooltipFlag.isAdvanced() && MobLassos.CONFIG.getHolder(ServerConfig.class).isAvailable()) {
+                    if (player != null && tooltipFlag.isAdvanced() && MobLassos.CONFIG.getHolder(ServerConfig.class)
+                            .isAvailable()) {
                         boolean hasPickUpTime = itemStack.has(ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value());
                         boolean hasReleaseTime = itemStack.has(ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value());
                         if (hasPickUpTime || hasReleaseTime) {
                             int maxHoldingTime = item.getMaxHoldingTime(tooltipContext.registries(), itemStack);
                             long currentHoldingTime = 0;
                             if (hasPickUpTime) {
-                                currentHoldingTime = item.getCurrentHoldingTime(Minecraft.getInstance().level,
+                                currentHoldingTime = item.getCurrentHoldingTime(player.level(),
                                         itemStack,
                                         ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value(),
                                         maxHoldingTime);
                             }
                             if (hasReleaseTime) {
                                 maxHoldingTime /= 5;
-                                currentHoldingTime = item.getCurrentHoldingTime(Minecraft.getInstance().level,
+                                currentHoldingTime = item.getCurrentHoldingTime(player.level(),
                                         itemStack,
                                         ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value(),
                                         maxHoldingTime);

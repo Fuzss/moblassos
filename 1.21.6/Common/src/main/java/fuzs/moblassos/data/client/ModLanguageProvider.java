@@ -32,10 +32,8 @@ public class ModLanguageProvider extends AbstractLanguageProvider {
         builder.add(ModRegistry.CONTRACT_ITEM.value(),
                 "desc",
                 "Allows picking-up villagers in an emerald lasso. Leveling up increases the chance to accept.");
-        builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT, "Holding");
-        builder.addEnchantment(ModRegistry.HOLDING_ENCHANTMENT,
-                "desc",
-                "Increases the time a lasso is able to hold a mob.");
+        builder.add(ModRegistry.HOLDING_ENCHANTMENT, "Holding");
+        builder.add(ModRegistry.HOLDING_ENCHANTMENT, "desc", "Increases the time a lasso is able to hold a mob.");
         builder.add(LassoType.GOLDEN.getFailureTranslationKey(), "%s cannot be captured");
         builder.add(LassoType.EMERALD.getFailureTranslationKey(), "%s must accept a contract first");
         builder.add(LassoType.HOSTILE.getFailureTranslationKey(), "%s must be below %s health (currently %s)");
