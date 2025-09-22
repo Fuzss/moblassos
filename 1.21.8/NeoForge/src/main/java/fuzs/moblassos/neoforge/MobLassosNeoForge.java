@@ -1,7 +1,6 @@
 package fuzs.moblassos.neoforge;
 
 import fuzs.moblassos.MobLassos;
-import fuzs.moblassos.data.ModDatapackRegistriesProvider;
 import fuzs.moblassos.data.ModRecipeProvider;
 import fuzs.moblassos.data.tags.ModEnchantmentTagProvider;
 import fuzs.moblassos.data.tags.ModEntityTypeTagProvider;
