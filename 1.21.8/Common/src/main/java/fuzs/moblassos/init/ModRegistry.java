@@ -5,12 +5,16 @@ import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.world.item.ContractItem;
 import fuzs.puzzleslib.api.attachment.v4.DataAttachmentRegistry;
 import fuzs.puzzleslib.api.attachment.v4.DataAttachmentType;
+import fuzs.puzzleslib.api.data.v2.AbstractDatapackRegistriesProvider;
 import fuzs.puzzleslib.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.api.init.v3.tags.TagFactory;
 import fuzs.puzzleslib.api.network.v4.PlayerSet;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
+import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceKey;
@@ -19,11 +23,14 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.util.Unit;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class ModRegistry {
+    public static final RegistrySetBuilder REGISTRY_SET_BUILDER = new RegistrySetBuilder().add(Registries.ENCHANTMENT,
+            ModRegistry::bootstrapEnchantments);
     static final RegistryManager REGISTRIES = RegistryManager.from(MobLassos.MOD_ID);
     public static final Holder.Reference<DataComponentType<Long>> ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE = REGISTRIES.registerDataComponentType(
             "entity_pick_up_time",
@@ -66,5 +73,18 @@ public class ModRegistry {
 
     public static void bootstrap() {
         // NO-OP
+    }
+
+    public static void bootstrapEnchantments(BootstrapContext<Enchantment> context) {
+        HolderGetter<Item> itemLookup = context.lookup(Registries.ITEM);
+        AbstractDatapackRegistriesProvider.registerEnchantment(context,
+                HOLDING_ENCHANTMENT,
+                Enchantment.enchantment(Enchantment.definition(itemLookup.getOrThrow(LASSO_ENCHANTABLE_ITEM_TAG),
+                        5,
+                        3,
+                        Enchantment.dynamicCost(5, 8),
+                        Enchantment.dynamicCost(55, 8),
+                        2,
+                        EquipmentSlotGroup.MAINHAND)));
     }
 }
