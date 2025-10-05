@@ -1,0 +1,24 @@
+{
+  "model": {
+    "type": "minecraft:condition",
+    "on_false": {
+      "type": "minecraft:model",
+      "model": "moblassos:item/creative_lasso"
+    },
+    "on_true": {
+      "type": "minecraft:model",
+      "model": "moblassos:item/creative_lasso_filled",
+      "tints": [
+        {
+          "type": "moblassos:lasso",
+          "tint_layer": 0
+        },
+        {
+          "type": "moblassos:lasso",
+          "tint_layer": 1
+        }
+      ]
+    },
+    "property": "moblassos:lasso/filled"
+  }
+}
