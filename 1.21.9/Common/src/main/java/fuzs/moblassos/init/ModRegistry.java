@@ -13,6 +13,7 @@ import net.minecraft.core.Holder;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -26,6 +27,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Rarity;
 import net.minecraft.world.item.enchantment.Enchantment;
 
 public class ModRegistry {
@@ -86,5 +88,15 @@ public class ModRegistry {
                         Enchantment.dynamicCost(55, 8),
                         2,
                         EquipmentSlotGroup.MAINHAND)));
+    }
+
+    public static Item.Properties lassoProperties() {
+        return new Item.Properties().stacksTo(1)
+                .enchantable(1)
+                .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false);
+    }
+
+    public static Item.Properties creativeLassoProperties() {
+        return lassoProperties().rarity(Rarity.EPIC);
     }
 }

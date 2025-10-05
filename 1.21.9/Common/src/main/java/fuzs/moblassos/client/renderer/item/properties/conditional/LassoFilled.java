@@ -14,7 +14,7 @@ public record LassoFilled() implements ConditionalItemModelProperty {
 
     @Override
     public boolean get(ItemStack itemStack, @Nullable ClientLevel clientLevel, @Nullable LivingEntity livingEntity, int seed, ItemDisplayContext itemDisplayContext) {
-        return itemStack.getItem() instanceof LassoItem item && item.hasStoredEntity(itemStack);
+        return itemStack.getItem() instanceof LassoItem item && item.hasOccupant(itemStack);
     }
 
     @Override

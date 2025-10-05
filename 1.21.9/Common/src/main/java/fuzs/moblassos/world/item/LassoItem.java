@@ -3,40 +3,34 @@ package fuzs.moblassos.world.item;
 import fuzs.moblassos.MobLassos;
 import fuzs.moblassos.config.ServerConfig;
 import fuzs.moblassos.init.ModRegistry;
-import fuzs.moblassos.util.LassoMobHelper;
 import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
-import fuzs.puzzleslib.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.api.item.v2.EnchantingHelper;
 import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
-import fuzs.puzzleslib.api.util.v1.ValueSerializationHelper;
 import fuzs.puzzleslib.impl.core.proxy.ProxyImpl;
-import net.minecraft.core.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.ARGB;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.animal.Bee;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.TypedEntityData;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BeehiveBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.level.storage.ValueInput;
-import net.minecraft.world.phys.Vec3;
-import org.apache.commons.lang3.mutable.MutableObject;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.function.BiFunction;
-import java.util.function.Supplier;
 
 public class LassoItem extends Item {
     public static final String KEY_REMAINING_TIME_IN_SECONDS = "item.moblassos.lasso.remaining";
@@ -49,94 +43,103 @@ public class LassoItem extends Item {
         this.type = type;
     }
 
-    public static Holder.Reference<Item> registerLassoItem(RegistryManager registries, String path, BiFunction<Properties, LassoType, Item> itemFactory, LassoType lassoType) {
-        return registerLassoItem(registries, path, itemFactory, Item.Properties::new, lassoType);
-    }
-
-    public static Holder.Reference<Item> registerLassoItem(RegistryManager registries, String path, BiFunction<Item.Properties, LassoType, Item> itemFactory, Supplier<Properties> itemPropertiesSupplier, LassoType lassoType) {
-        return registries.registerItem(path,
-                (Item.Properties properties) -> itemFactory.apply(properties, lassoType),
-                () -> itemPropertiesSupplier.get()
-                        .stacksTo(1)
-                        .enchantable(1)
-                        .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, false)
-                        .component(DataComponents.ENTITY_DATA, CustomData.EMPTY));
-    }
-
-    public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
+    public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand interactionHand, Entity entity) {
         // we do not override the item method, this is called by an event/callback instead to allow overriding interaction implemented on the entity which runs first and might prevent all this
-        ItemStack itemInHand = player.getItemInHand(hand);
+        ItemStack itemInHand = player.getItemInHand(interactionHand);
         if (itemInHand.getItem() instanceof LassoItem item && entity instanceof Mob mob && entity.isAlive()) {
-            if (!itemInHand.has(ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value())) {
-                if (!item.hasStoredEntity(itemInHand) && item.type.canPlayerPickUp(player, mob)) {
-                    if (!player.level().isClientSide) {
-                        entity.stopRiding();
-                        entity.ejectPassengers();
-                        entity.playSound(ModRegistry.LASSO_PICK_UP_SOUND_EVENT.value());
-                        if (entity.hasCustomName()) {
-                            itemInHand.set(DataComponents.CUSTOM_NAME, entity.getCustomName());
-                        }
-                        CompoundTag compoundTag = LassoMobHelper.saveEntity(entity);
-                        entity.discard();
-                        itemInHand.set(DataComponents.ENTITY_DATA, CustomData.of(compoundTag));
-                        if (item.type.hasMaxHoldingTime()) {
-                            itemInHand.set(ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value(),
-                                    level.getGameTime());
-                        }
+            if (level instanceof ServerLevel
+                    && !itemInHand.has(ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value())) {
+                if (!item.hasOccupant(itemInHand) && item.type.canPlayerPickUp(player, mob)) {
+                    item.storeOccupant(itemInHand, mob, player);
+                    if (item.type.hasMaxHoldingTime()) {
+                        itemInHand.set(ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value(),
+                                level.getGameTime());
                     }
                 }
             }
 
-            return EventResultHolder.interrupt(InteractionResultHelper.sidedSuccess(player.level().isClientSide));
+            return EventResultHolder.interrupt(InteractionResultHelper.sidedSuccess(player.level().isClientSide()));
         }
 
         return EventResultHolder.pass();
     }
 
-    public boolean hasStoredEntity(ItemStack itemStack) {
-        return !itemStack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY).isEmpty();
+    /**
+     * @see BeehiveBlockEntity#addOccupant(Bee)
+     */
+    public void storeOccupant(ItemStack itemStack, Mob mob, Player player) {
+        mob.stopRiding();
+        mob.ejectPassengers();
+        mob.dropLeash();
+        TypedEntityData<EntityType<?>> entityData = BeehiveBlockEntity.Occupant.of(mob).entityData();
+        itemStack.set(DataComponents.ENTITY_DATA, entityData);
+        if (mob.hasCustomName()) {
+            itemStack.set(DataComponents.CUSTOM_NAME, mob.getCustomName());
+        }
+
+        player.playSound(ModRegistry.LASSO_PICK_UP_SOUND_EVENT.value());
+        mob.discard();
+    }
+
+    public boolean hasOccupant(ItemStack itemStack) {
+        return itemStack.has(DataComponents.ENTITY_DATA);
     }
 
     @Nullable
     public EntityType<?> getStoredEntityType(ItemStack itemStack) {
-        CustomData customData = itemStack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY);
-        MutableObject<EntityType<?>> mutableObject = new MutableObject<>();
-        ValueSerializationHelper.load(this::toString,
-                RegistryAccess.EMPTY,
-                customData.getUnsafe(),
-                (ValueInput valueInput) -> {
-                    EntityType.by(valueInput).ifPresent(mutableObject::setValue);
-                });
-        return mutableObject.getValue();
+        if (itemStack.has(DataComponents.ENTITY_DATA)) {
+            return itemStack.get(DataComponents.ENTITY_DATA).type();
+        } else {
+            return null;
+        }
     }
 
     @Override
     public InteractionResult useOn(UseOnContext context) {
-        if (this.hasStoredEntity(context.getItemInHand())) {
+        if (this.hasOccupant(context.getItemInHand())) {
             Level level = context.getLevel();
-            if (level.isClientSide) {
+            if (level.isClientSide()) {
                 return InteractionResult.SUCCESS;
             } else {
                 ItemStack itemInHand = context.getItemInHand();
-                BlockPos blockPos = context.getClickedPos();
-                Direction direction = context.getClickedFace();
-                BlockState blockState = level.getBlockState(blockPos);
-
-                BlockPos releasePos;
-                if (blockState.getCollisionShape(level, blockPos).isEmpty()) {
-                    releasePos = blockPos;
-                } else {
-                    releasePos = blockPos.relative(direction);
-                }
-
-                this.releaseContents(context.getPlayer(), level, itemInHand, blockPos, releasePos);
+                BlockPos blockPos = this.getReleasePosition(context);
+                this.releaseContents(context.getPlayer(), (ServerLevel) level, itemInHand, blockPos);
                 this.tryConvertPickUpTime(level, itemInHand);
-
                 return InteractionResult.CONSUME;
             }
         } else {
             return InteractionResult.PASS;
         }
+    }
+
+    private BlockPos getReleasePosition(UseOnContext context) {
+        BlockPos blockPos = context.getClickedPos();
+        BlockState blockState = context.getLevel().getBlockState(blockPos);
+        if (blockState.getCollisionShape(context.getLevel(), blockPos).isEmpty()) {
+            return blockPos;
+        } else {
+            return blockPos.relative(context.getClickedFace());
+        }
+    }
+
+    public void releaseContents(@Nullable Entity carrierEntity, ServerLevel serverLevel, ItemStack itemStack, BlockPos blockPos) {
+        if (itemStack.has(DataComponents.ENTITY_DATA)) {
+            EntityType<?> entityType = itemStack.get(DataComponents.ENTITY_DATA).type();
+            Entity entity = entityType.create(serverLevel,
+                    EntityType.createDefaultStackConfig(serverLevel, itemStack, null),
+                    blockPos,
+                    EntitySpawnReason.BUCKET,
+                    true,
+                    false);
+            if (entity != null) {
+                serverLevel.addFreshEntity(entity);
+                entity.playSound(ModRegistry.LASSO_RELEASE_SOUND_EVENT.value());
+                serverLevel.gameEvent(carrierEntity, GameEvent.ENTITY_PLACE, blockPos);
+            }
+        }
+
+        itemStack.remove(DataComponents.ENTITY_DATA);
+        itemStack.remove(DataComponents.CUSTOM_NAME);
     }
 
     public void tryConvertPickUpTime(Level level, ItemStack itemStack) {
@@ -150,45 +153,15 @@ public class LassoItem extends Item {
         }
     }
 
-    public void releaseContents(@Nullable Entity entity, Level level, ItemStack itemStack, BlockPos clickedPos, BlockPos releasePos) {
-        CompoundTag compoundTag = itemStack.getOrDefault(DataComponents.ENTITY_DATA, CustomData.EMPTY).copyTag();
-        if (!compoundTag.isEmpty() && level instanceof ServerLevel serverLevel) {
-            LassoMobHelper.removeTagKeys(serverLevel, compoundTag);
-            ValueSerializationHelper.load(this::toString,
-                    level.registryAccess(),
-                    compoundTag,
-                    (ValueInput valueInput) -> {
-                        this.releaseContentAt(valueInput, serverLevel, releasePos, itemStack);
-                    });
-            level.gameEvent(entity, GameEvent.ENTITY_PLACE, clickedPos);
-        }
-        itemStack.set(DataComponents.ENTITY_DATA, CustomData.EMPTY);
-        itemStack.remove(DataComponents.CUSTOM_NAME);
-    }
-
-    private void releaseContentAt(ValueInput valueInput, ServerLevel serverLevel, BlockPos blockPos, ItemStack itemStack) {
-        EntityType.create(valueInput, serverLevel, EntitySpawnReason.BUCKET).map((Entity entity) -> {
-            LassoMobHelper.moveEntityTo(entity, serverLevel, blockPos, true);
-            entity.setDeltaMovement(Vec3.ZERO);
-            serverLevel.addFreshEntity(entity);
-
-            if (itemStack.has(DataComponents.CUSTOM_NAME) && entity instanceof LivingEntity) {
-                entity.setCustomName(itemStack.getHoverName());
-            }
-
-            entity.playSound(ModRegistry.LASSO_RELEASE_SOUND_EVENT.value());
-            return entity;
-        });
-    }
-
     @Override
     public void inventoryTick(ItemStack itemStack, ServerLevel serverLevel, Entity entity, @Nullable EquipmentSlot equipmentSlot) {
-        if (this.type == LassoType.HOSTILE && this.hasStoredEntity(itemStack)) {
+        if (this.type == LassoType.HOSTILE && this.hasOccupant(itemStack)) {
             int hostileDamageRate = MobLassos.CONFIG.get(ServerConfig.class).hostileDamageRate;
             if (hostileDamageRate != -1 && serverLevel.getGameTime() % (hostileDamageRate * 20L) == 0) {
-                entity.hurt(serverLevel.damageSources().magic(), 1.0F);
+                entity.hurtServer(serverLevel, serverLevel.damageSources().magic(), 1.0F);
             }
         }
+
         if (this.type.hasMaxHoldingTime()) {
             if (itemStack.has(ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value())) {
                 int maxHoldingTime = this.getMaxHoldingTime(serverLevel, itemStack);
@@ -197,14 +170,11 @@ public class LassoItem extends Item {
                         ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value(),
                         maxHoldingTime);
                 if (currentHoldingTime >= maxHoldingTime) {
-                    this.releaseContents(entity,
-                            serverLevel,
-                            itemStack,
-                            entity.blockPosition(),
-                            entity.blockPosition());
+                    this.releaseContents(entity, serverLevel, itemStack, entity.blockPosition());
                     this.tryConvertPickUpTime(serverLevel, itemStack);
                 }
             }
+
             if (itemStack.has(ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value())) {
                 int maxHoldingTime = this.getMaxHoldingTime(serverLevel, itemStack) / 5;
                 long currentHoldingTime = this.getCurrentHoldingTime(serverLevel,
@@ -235,6 +205,7 @@ public class LassoItem extends Item {
                     ModRegistry.ENTITY_PICK_UP_TIME_DATA_COMPONENT_TYPE.value(),
                     maxHoldingTime);
         }
+
         if (itemStack.has(ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value())) {
             maxHoldingTime /= 5;
             currentHoldingTime = maxHoldingTime - this.getCurrentHoldingTime(ProxyImpl.get().getClientLevel(),
@@ -242,6 +213,7 @@ public class LassoItem extends Item {
                     ModRegistry.ENTITY_RELEASE_TIME_DATA_COMPONENT_TYPE.value(),
                     maxHoldingTime);
         }
+
         return Math.round(13.0F - currentHoldingTime * 13.0F / maxHoldingTime);
     }
 
@@ -272,13 +244,8 @@ public class LassoItem extends Item {
 
     @Override
     public void onDestroyed(ItemEntity itemEntity) {
-        ItemStack itemStack = itemEntity.getItem();
-        if (this.hasStoredEntity(itemStack)) {
-            this.releaseContents(null,
-                    itemEntity.level(),
-                    itemStack,
-                    itemEntity.blockPosition(),
-                    itemEntity.blockPosition());
+        if (itemEntity.level() instanceof ServerLevel serverLevel && this.hasOccupant(itemEntity.getItem())) {
+            this.releaseContents(null, serverLevel, itemEntity.getItem(), itemEntity.blockPosition());
         }
     }
 

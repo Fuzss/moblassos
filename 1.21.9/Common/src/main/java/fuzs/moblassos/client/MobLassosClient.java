@@ -29,7 +29,7 @@ public class MobLassosClient implements ClientModConstructor {
         ItemTooltipRegistry.ITEM.registerItemTooltip(LassoItem.class,
                 (ItemStack itemStack, Item.TooltipContext tooltipContext, TooltipFlag tooltipFlag, @Nullable Player player, Consumer<Component> tooltipLineConsumer) -> {
                     LassoItem item = (LassoItem) itemStack.getItem();
-                    if (item.hasStoredEntity(itemStack)) {
+                    if (item.hasOccupant(itemStack)) {
                         MutableComponent component = Component.translatable("gui.entity_tooltip.type",
                                 item.getStoredEntityType(itemStack).getDescription());
                         tooltipLineConsumer.accept(component.withStyle(ChatFormatting.BLUE));

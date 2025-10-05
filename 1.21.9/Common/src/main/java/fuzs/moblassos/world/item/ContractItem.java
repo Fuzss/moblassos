@@ -32,34 +32,24 @@ public class ContractItem extends Item {
     }
 
     public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
-
         ItemStack itemInHand = player.getItemInHand(hand);
-        if (itemInHand.is(ModRegistry.CONTRACT_ITEM.value()) && entity instanceof AbstractVillager abstractVillager &&
-                abstractVillager.isAlive()) {
-
+        if (itemInHand.is(ModRegistry.CONTRACT_ITEM.value()) && entity instanceof AbstractVillager abstractVillager
+                && abstractVillager.isAlive()) {
             if (canAcceptContract(abstractVillager)) {
-
                 if (!ModRegistry.VILLAGER_CONTRACT_ATTACHMENT_TYPE.has(abstractVillager)) {
-
-                    if (!level.isClientSide) {
-
+                    if (!level.isClientSide()) {
                         ModRegistry.VILLAGER_CONTRACT_ATTACHMENT_TYPE.set(abstractVillager, Unit.INSTANCE);
-
                         if (!player.getAbilities().instabuild) {
-
                             itemInHand.shrink(1);
                         }
                     }
 
                     onUseContract(level, player, abstractVillager, itemInHand, true);
                 } else {
-
                     return EventResultHolder.pass();
                 }
             } else {
-
-                if (!level.isClientSide) {
-
+                if (!level.isClientSide()) {
                     abstractVillager.setUnhappyCounter(40);
                     abstractVillager.playSound(SoundEvents.VILLAGER_NO, 1.0F, abstractVillager.getVoicePitch());
                 }
@@ -67,21 +57,21 @@ public class ContractItem extends Item {
                 onUseContract(level, player, abstractVillager, ItemStack.EMPTY, false);
             }
         } else {
-
             return EventResultHolder.pass();
         }
 
-        return EventResultHolder.interrupt(InteractionResultHelper.sidedSuccess(level.isClientSide));
+        return EventResultHolder.interrupt(InteractionResultHelper.sidedSuccess(level.isClientSide()));
     }
 
     private static void onUseContract(Level level, Player player, AbstractVillager abstractVillager, ItemStack itemInHand, boolean happyParticles) {
-        if (!level.isClientSide) {
+        if (!level.isClientSide()) {
             // must just not be empty for yes sound to play, so any stack is ok basically
             // just an empty stack for no sound to play
             abstractVillager.notifyTradeUpdated(itemInHand);
             MessageSender.broadcast(PlayerSet.nearEntity(abstractVillager),
                     new ClientboundVillagerParticlesMessage(abstractVillager.getId(), happyParticles));
         }
+
         Component displayName = getVillagerDisplayName(abstractVillager);
         player.displayClientMessage(Component.translatable(
                 ModRegistry.CONTRACT_ITEM.value().getDescriptionId() + "." + (happyParticles ? "accept" : "reject"),
@@ -104,8 +94,8 @@ public class ContractItem extends Item {
 
     public static boolean canAcceptContract(AbstractVillager abstractVillager) {
         if (abstractVillager instanceof Villager villager) {
-            return Math.abs(villager.getUUID().getLeastSignificantBits() % VillagerData.MAX_VILLAGER_LEVEL) <
-                    villager.getVillagerData().level();
+            return Math.abs(villager.getUUID().getLeastSignificantBits() % VillagerData.MAX_VILLAGER_LEVEL)
+                    < villager.getVillagerData().level();
         } else {
             return true;
         }
