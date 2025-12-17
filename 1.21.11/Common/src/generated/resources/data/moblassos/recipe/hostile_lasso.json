@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": "minecraft:iron_nugget",
+    "&": "moblassos:golden_lasso",
+    "+": "minecraft:blaze_rod",
+    "X": [
+      "minecraft:leather",
+      "minecraft:rabbit_hide"
+    ]
+  },
+  "pattern": [
+    "X+X",
+    "#&#",
+    "X+X"
+  ],
+  "result": {
+    "count": 1,
+    "id": "moblassos:hostile_lasso"
+  }
+}

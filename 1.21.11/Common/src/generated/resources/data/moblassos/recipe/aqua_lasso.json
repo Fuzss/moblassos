@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": [
+      "minecraft:cod",
+      "minecraft:salmon",
+      "minecraft:pufferfish",
+      "minecraft:tropical_fish"
+    ],
+    "&": "moblassos:golden_lasso",
+    "X": "minecraft:lapis_lazuli"
+  },
+  "pattern": [
+    " X ",
+    "#&#",
+    " X "
+  ],
+  "result": {
+    "count": 1,
+    "id": "moblassos:aqua_lasso"
+  }
+}
