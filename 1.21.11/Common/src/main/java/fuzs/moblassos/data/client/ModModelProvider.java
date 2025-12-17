@@ -11,7 +11,7 @@ import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.data.models.model.ModelTemplates;
 import net.minecraft.client.renderer.item.ItemModel;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Item;
 
 public class ModModelProvider extends AbstractModelProvider {
@@ -34,12 +34,12 @@ public class ModModelProvider extends AbstractModelProvider {
     public final void generateLasso(Item item, ItemModelGenerators itemModelGenerators) {
         ItemModel.Unbaked falseModel = ItemModelUtils.plainModel(itemModelGenerators.createFlatItemModel(item,
                 ModelTemplates.FLAT_ITEM));
-        ResourceLocation resourceLocation = ModelLocationHelper.getItemModel(item, "_filled");
-        itemModelGenerators.generateLayeredItem(resourceLocation,
+        Identifier identifier = ModelLocationHelper.getItemModel(item, "_filled");
+        itemModelGenerators.generateLayeredItem(identifier,
                 ModelLocationHelper.getItemTexture(MobLassos.id("lasso_overlay_light")),
                 ModelLocationHelper.getItemTexture(MobLassos.id("lasso_overlay_dark")),
                 ModelLocationHelper.getItemTexture(item));
-        ItemModel.Unbaked trueModel = ItemModelUtils.tintedModel(resourceLocation, new Lasso(0), new Lasso(1));
+        ItemModel.Unbaked trueModel = ItemModelUtils.tintedModel(identifier, new Lasso(0), new Lasso(1));
         itemModelGenerators.generateBooleanDispatch(item, new LassoFilled(), trueModel, falseModel);
     }
 }
